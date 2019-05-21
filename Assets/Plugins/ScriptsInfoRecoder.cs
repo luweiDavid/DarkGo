@@ -11,7 +11,7 @@ using System.IO;
 
 public class ScriptsInfoRecoder : UnityEditor.AssetModificationProcessor {
     private static void OnWillCreateAsset(string path) {
-        path = path.Replace(".meta", "");
+        path = path.Replace(".meta", ""); 
         if (path.EndsWith(".cs")) {
             string str = File.ReadAllText(path);
             str = str.Replace("#CreateAuthor#", Environment.UserName).Replace(

@@ -706,6 +706,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7176842796757075967}
   - component: {fileID: 7176842796757075966}
+  - component: {fileID: 4152386852364379742}
   m_Layer: 0
   m_Name: LoginWnd
   m_TagString: Untagged
@@ -742,6 +743,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7176842796757075960}
   m_CullTransparentMesh: 0
+--- !u!114 &4152386852364379742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7176842796757075960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 004d13c29dd201547b2e46bab21b1609, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7176842796913769369
 GameObject:
   m_ObjectHideFlags: 0
