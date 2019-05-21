@@ -8,5 +8,11 @@
 
 public class Constant  
 {
+    //场景名称
     public const string SceneName_Login = "Login";
+
+    //音乐名称
+    public const string AudioName_BgLogin = "bgLogin";
+
+
 }

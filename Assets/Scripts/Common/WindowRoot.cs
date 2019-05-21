@@ -52,6 +52,11 @@ public class WindowRoot : MonoBehaviour
         img.transform.gameObject.SetActive(isActive);
     }
 
+    protected void SetActive(Text txt, bool isActive = true)
+    {
+        txt.transform.gameObject.SetActive(isActive);
+    }
+
 
     protected void SetText(Text txt, string content = "") {
         txt.text = content;

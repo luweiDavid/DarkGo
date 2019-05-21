@@ -8,20 +8,28 @@
 
 using UnityEngine;
 
-public class LoginSys : MonoBehaviour 
+public class LoginSys : SystemRoot 
 {
     public static LoginSys Instance;
 
 
-    public void Init() {
+    public override void Init() {
+        base.Init();
+
         Instance = this; 
     }
     public void EnterLogin() {
 
-        ResSvc.Instance.AsyncLoadScene(Constant.SceneName_Login, () =>
+        mResSvc.AsyncLoadScene(Constant.SceneName_Login, () =>
         {
             //打开登陆面板 
-            GameRoot.Instance.mLoginWnd.SetWndState(true);
+            mGameRoot.mLoginWnd.SetWndState(true);
+            mAudioSvc.PlayBgAudio(Constant.AudioName_BgLogin, true);
+
+            mGameRoot.AddTips("111111");
+            mGameRoot.AddTips("222222");
+            mGameRoot.AddTips("3333333");
+            mGameRoot.AddTips("44444444");
         }); 
 
     }

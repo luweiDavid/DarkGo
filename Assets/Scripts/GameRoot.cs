@@ -12,11 +12,15 @@ public class GameRoot : MonoBehaviour
 {
     public static GameRoot Instance;
 
-    public LoginSys mLoginSys;
     public ResSvc mResSvc;
+    public AudioSvc mAudioSvc;
+    public LoginSys mLoginSys;
 
+
+    public Transform mUIRootTr;
     public LoadingWnd mLoadingWnd;
     public LoginWnd mLoginWnd;
+    public DynamicTipsWnd mDynamicTipsWnd;
 
     private void Awake()
     {
@@ -26,15 +30,37 @@ public class GameRoot : MonoBehaviour
     }
 
     private void Init() {
+        mUIRootTr = transform.Find("UIRoot");
         mLoadingWnd = transform.Find("UIRoot/LoadingWnd").GetComponent<LoadingWnd>();
         mLoginWnd = transform.Find("UIRoot/LoginWnd").GetComponent<LoginWnd>();
+        mDynamicTipsWnd = transform.Find("UIRoot/DynamicTips").GetComponent<DynamicTipsWnd>();
 
         mResSvc = GetComponent<ResSvc>();
         mResSvc.Init();
+
+        mAudioSvc = GetComponent<AudioSvc>();
+        mAudioSvc.Init();
+
         mLoginSys = GetComponent<LoginSys>();
-        mLoginSys.Init(); 
+        mLoginSys.Init();
+        InitUIRoot();
 
         mLoginSys.EnterLogin();
+    }
+
+
+
+    public void InitUIRoot() {
+        for (int i = 0; i < mUIRootTr.childCount; i++)
+        {
+            mUIRootTr.GetChild(i).gameObject.SetActive(false);
+        }
+
+        mDynamicTipsWnd.SetWndState();
+    }
+
+    public void AddTips(string tips) {
+        mDynamicTipsWnd.AddTips(tips);
     }
 
 }
