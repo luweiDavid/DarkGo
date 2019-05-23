@@ -11,7 +11,9 @@ using UnityEngine.UI;
 
 public class WindowRoot : MonoBehaviour
 {
+    protected GameRoot mGameRoot;
     protected ResSvc mResSvc;
+    protected AudioSvc mAudioSvc;
     
     public void SetWndState(bool isActive = true) {
         if (gameObject.activeSelf != isActive) {
@@ -27,13 +29,18 @@ public class WindowRoot : MonoBehaviour
     }
 
     protected virtual void InitWnd() {
+        mGameRoot = GameRoot.Instance;
         mResSvc = ResSvc.Instance;
-
+        mAudioSvc = AudioSvc.Instance;
     }
 
     protected virtual void CloseWnd() {
+        mGameRoot = null;
         mResSvc = null;
+        mAudioSvc = null;
     }
+
+
 
     #region TOOL FUNC
     protected void SetActive(GameObject go, bool isActive = true) {

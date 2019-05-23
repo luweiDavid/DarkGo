@@ -13,6 +13,7 @@ public class Constant
 
     //音乐名称
     public const string AudioName_BgLogin = "bgLogin";
-
+    public const string AudioName_BtnLogin = "uiLoginBtn";
+    public const string AudioName_BtnClick = "uiClickBtn";
 
 }

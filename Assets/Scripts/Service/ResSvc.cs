@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,6 +22,8 @@ public class ResSvc : MonoBehaviour
     public void Init()
     {
         Instance = this;
+
+        InitRandNameCfg(); 
     }
 
     /// <summary>
@@ -64,5 +67,74 @@ public class ResSvc : MonoBehaviour
         }
         return clip;
     }
+
+
+
+
+
+
+
+
+    #region  读取配置表
+    public string GetRandName(bool man = true) {
+        string name = "";
+        name = surNameList[PETools.RandomInt(0, surNameList.Count - 1)];
+        if (man)
+        {
+            name += manNameList[PETools.RandomInt(0, manNameList.Count - 1)];
+        }
+        else {
+            name += womanNameList[PETools.RandomInt(0, womanNameList.Count - 1)];
+        }
+
+        return name;
+    }
+
+
+
+    private List<string> surNameList = new List<string>();
+    private List<string> manNameList = new List<string>();
+    private List<string> womanNameList = new List<string>(); 
+    private void InitRandNameCfg() {
+        TextAsset ta = Resources.Load<TextAsset>(PathDefine.RdName);
+        if (!ta) {
+            Debug.LogError(PathDefine.RdName + " 路径错误");
+        }
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.LoadXml(ta.text);
+
+        XmlNodeList nodeList = xmlDoc.SelectSingleNode("root").ChildNodes;
+
+        for (int i = 0; i < nodeList.Count; i++)
+        {
+            XmlElement ele = nodeList[i] as XmlElement;
+            if (ele.GetAttribute("ID") == null) {
+                continue;
+            }
+            int ID = Convert.ToInt32(ele.GetAttribute("ID"));
+            foreach (XmlElement subEle in nodeList[i].ChildNodes)
+            {
+                string str = subEle.Name;
+                switch (str)
+                { 
+                    case "surname" :
+                        surNameList.Add(subEle.InnerText);
+                        break;
+                    case "man":
+                        manNameList.Add(subEle.InnerText);
+                        break;
+                    case "woman":
+                        womanNameList.Add(subEle.InnerText);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    #endregion
+
+
 
 }

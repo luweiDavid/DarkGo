@@ -22,6 +22,9 @@ public class LoginWnd : WindowRoot
         iptAccount = transform.Find("RightPanel/IptAccountBg/IptAccount").GetComponent<InputField>();
         iptPassword = transform.Find("RightPanel/IptPasswordBg/IptPassword").GetComponent<InputField>();
         btnEnter = transform.Find("RightPanel/BtnEnter").GetComponent<Button>();
+
+        btnNotice.onClick.AddListener(OnNoticeBtnClick);
+        btnEnter.onClick.AddListener(OnEnterBtnClick);
     }
 
     protected override void InitWnd()
@@ -40,6 +43,28 @@ public class LoginWnd : WindowRoot
         }
     }
 
-    
+    private void OnEnterBtnClick()
+    {
+        mAudioSvc.PlayUIAudio(Constant.AudioName_BtnLogin);
+        string acct = iptAccount.text;
+        string password = iptPassword.text;
+
+        string name = mResSvc.GetRandName(); 
+        Debug.Log(name);
+
+        if (!string.IsNullOrEmpty(acct) && !string.IsNullOrEmpty(password))
+        {
+            //请求登陆
+        }
+        else {
+            mGameRoot.AddTips("账号或密码为空！");
+        }
+    }
+
+    private void OnNoticeBtnClick() {
+        mAudioSvc.PlayUIAudio(Constant.AudioName_BtnClick);
+
+        mGameRoot.AddTips("功能正在开发中.....");
+    }
 
 }

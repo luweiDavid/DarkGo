@@ -24,15 +24,19 @@ public class LoginSys : SystemRoot
         {
             //打开登陆面板 
             mGameRoot.mLoginWnd.SetWndState(true);
-            mAudioSvc.PlayBgAudio(Constant.AudioName_BgLogin, true);
-
-            mGameRoot.AddTips("111111");
-            mGameRoot.AddTips("222222");
-            mGameRoot.AddTips("3333333");
-            mGameRoot.AddTips("44444444");
+            mAudioSvc.PlayBgAudio(Constant.AudioName_BgLogin, true); 
         }); 
 
     }
 
+    public void ReqLogin(string acct, string password)
+    {
 
+
+    }
+
+    public void RspLogin()
+    { 
+        //如果服务器返回成功，则关闭登陆面板，打开角色创建面板或主城界面
+    }
 }
