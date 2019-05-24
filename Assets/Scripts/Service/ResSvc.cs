@@ -78,13 +78,13 @@ public class ResSvc : MonoBehaviour
     #region  读取配置表
     public string GetRandName(bool man = true) {
         string name = "";
-        name = surNameList[PETools.RandomInt(0, surNameList.Count - 1)];
+        name = surNameList[CommonTool.RandomInt(0, surNameList.Count - 1)];
         if (man)
         {
-            name += manNameList[PETools.RandomInt(0, manNameList.Count - 1)];
+            name += manNameList[CommonTool.RandomInt(0, manNameList.Count - 1)];
         }
         else {
-            name += womanNameList[PETools.RandomInt(0, womanNameList.Count - 1)];
+            name += womanNameList[CommonTool.RandomInt(0, womanNameList.Count - 1)];
         }
 
         return name;

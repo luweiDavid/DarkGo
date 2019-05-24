@@ -6,6 +6,7 @@
 	功能：业务系统 - 登陆系统
 *****************************************************/
 
+using Protocol;
 using UnityEngine;
 
 public class LoginSys : SystemRoot 
@@ -29,14 +30,29 @@ public class LoginSys : SystemRoot
 
     }
 
-    public void ReqLogin(string acct, string password)
+    public void ReqLogin(string _acct, string _password)
     {
-
-
+        NetMsg msg = new NetMsg
+        {
+            cmd = (int)MsgType.ReqLogin,
+            ReqLogin = new ReqLogin
+            {
+                account = _acct,
+                password = _password,
+            }
+        };
+        mNetSvc.SendMsg(msg);
+        Debug.Log("ReqLogin");
     }
 
-    public void RspLogin()
-    { 
+    public void RspLogin(NetMsg msg)
+    {
         //如果服务器返回成功，则关闭登陆面板，打开角色创建面板或主城界面
+        Debug.Log("RspLogin");
+        RspLogin rspData = msg.RspLogin;
+        if (rspData.data.Name == "") {
+            mGameRoot.mLoginWnd.SetWndState(false);
+            mGameRoot.mCreateWnd.SetWndState();
+        }
     }
 }

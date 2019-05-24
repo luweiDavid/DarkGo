@@ -6,6 +6,7 @@
 	功能：登陆界面
 *****************************************************/
 
+using Protocol;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,25 +47,22 @@ public class LoginWnd : WindowRoot
     private void OnEnterBtnClick()
     {
         mAudioSvc.PlayUIAudio(Constant.AudioName_BtnLogin);
-        string acct = iptAccount.text;
-        string password = iptPassword.text;
+        string _acct = iptAccount.text;
+        string _password = iptPassword.text; 
 
-        string name = mResSvc.GetRandName(); 
-        Debug.Log(name);
-
-        if (!string.IsNullOrEmpty(acct) && !string.IsNullOrEmpty(password))
-        {
-            //请求登陆
+        if (!string.IsNullOrEmpty(_acct) && !string.IsNullOrEmpty(_password))
+        { 
+            LoginSys.Instance.ReqLogin(_acct, _password);
         }
         else {
-            mGameRoot.AddTips("账号或密码为空！");
+            mGameRoot.AddTips(Language.GetString(1));
         }
     }
 
     private void OnNoticeBtnClick() {
         mAudioSvc.PlayUIAudio(Constant.AudioName_BtnClick);
 
-        mGameRoot.AddTips("功能正在开发中.....");
+        mGameRoot.AddTips(Language.GetString(1000));
     }
 
 }

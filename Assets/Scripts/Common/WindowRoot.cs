@@ -14,6 +14,7 @@ public class WindowRoot : MonoBehaviour
     protected GameRoot mGameRoot;
     protected ResSvc mResSvc;
     protected AudioSvc mAudioSvc;
+    protected NetSvc mNetSvc;
     
     public void SetWndState(bool isActive = true) {
         if (gameObject.activeSelf != isActive) {
@@ -32,12 +33,14 @@ public class WindowRoot : MonoBehaviour
         mGameRoot = GameRoot.Instance;
         mResSvc = ResSvc.Instance;
         mAudioSvc = AudioSvc.Instance;
+        mNetSvc = NetSvc.Instance;
     }
 
     protected virtual void CloseWnd() {
         mGameRoot = null;
         mResSvc = null;
         mAudioSvc = null;
+        mNetSvc = null;
     }
 
 

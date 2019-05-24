@@ -16,8 +16,7 @@ public class LoadingWnd : WindowRoot
     private Image imgPoint;
     private Text txtValue;
 
-    private float fillWidth;
-    private bool hadGetComponnets = false;
+    private float fillWidth; 
 
     private void Awake() {
         txtTips = transform.Find("BottomPanel/TxtDes").GetComponent<Text>();
@@ -25,7 +24,6 @@ public class LoadingWnd : WindowRoot
         imgPoint = transform.Find("BottomPanel/ProgressBarBg/ImgLightPoint").GetComponent<Image>();
         txtValue = transform.Find("BottomPanel/ProgressBarBg/TxtValue").GetComponent<Text>();
         fillWidth = imgFill.GetComponent<RectTransform>().sizeDelta.x;
-        hadGetComponnets = true;
     }
 
     protected override void InitWnd()

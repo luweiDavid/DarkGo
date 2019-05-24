@@ -13,11 +13,13 @@ public class SystemRoot : MonoBehaviour
     protected GameRoot mGameRoot;
     protected ResSvc mResSvc;
     protected AudioSvc mAudioSvc;
+    protected NetSvc mNetSvc;
 
     public virtual void Init() {
         mGameRoot = GameRoot.Instance;
         mResSvc = ResSvc.Instance;
         mAudioSvc = AudioSvc.Instance;
+        mNetSvc = NetSvc.Instance;
     }
     
 }

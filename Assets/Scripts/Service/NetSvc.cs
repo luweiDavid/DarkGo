@@ -8,25 +8,99 @@
 
 using UnityEngine;
 using PENet;
-using Protocal;
+using Protocol;
+using System.Collections.Generic;
 
 public class NetSvc : MonoBehaviour 
 {
+    private const string obj = "lock";
+
+    public static NetSvc Instance;
+
     PESocket<ClientSession, NetMsg> socket = null;
+    private Queue<NetMsg> msgQueue = new Queue<NetMsg>();
+
+
 
 
     private void Start()
     {
         socket = new PESocket<ClientSession, NetMsg>();
-        socket.StartAsClient(IPCfg.srvIP, IPCfg.srvPort);
+        socket.StartAsClient(ServerCfg.IP, ServerCfg.Port);
 
-        //str ： 错误信息， lev ： 错误等级
+        SetLog();
+    }
+
+    public void Init()
+    {
+        Instance = this;
+        Debug.Log("NetSvc Init Done");
+    }
+
+    public void SendMsg(NetMsg msg) {
+        if (socket.session != null)
+        {
+            socket.session.SendMsg(msg);
+        }
+        else {
+            GameRoot.Instance.AddTips(Language.GetString(2));
+            Init();   
+        }
+    }
+
+    public void AddMsg(NetMsg msg) {
+        lock (obj) {
+            msgQueue.Enqueue(msg);
+        }
+    }
+
+    public void Update()
+    {
+        if (msgQueue.Count > 0) {
+            NetMsg msg = msgQueue.Dequeue();
+            lock (obj) {
+                HandleMsg(msg);
+            }
+        }
+    }
+
+    private void HandleMsg(NetMsg msg) {
+        Debug.Log("HandleMsg");
+        if (msg.err != (int)ErrorCode.None) {
+            HandleErrorCode((ErrorCode)msg.err);
+            return;
+        }
+        switch ((MsgType)msg.cmd)
+        {  
+            case MsgType.RspLogin:
+                LoginSys.Instance.RspLogin(msg);
+                break; 
+        }
+    }
+
+
+
+    public void HandleErrorCode(ErrorCode err) {
+        switch (err)
+        { 
+            case ErrorCode.AlreadyOnline:
+                GameRoot.Instance.AddTips(Language.GetString(3));
+                break;
+            case ErrorCode.InvalidPassword:
+                GameRoot.Instance.AddTips(Language.GetString(4));
+                break; 
+        }
+    }
+
+
+
+    private void SetLog() {
         socket.SetLog(true, (str, lev) =>
         {
             switch (lev)
             {
                 case 1:
-                    Debug.Log(str); 
+                    Debug.Log(str);
                     break;
                 case 2:
                     Debug.LogWarning(str);
@@ -41,17 +115,6 @@ public class NetSvc : MonoBehaviour
                     break;
             }
         });
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            socket.session.SendMsg(new NetMsg
-            {
-                content = "Hello Unity"
-            });
-        }
     }
 
 }

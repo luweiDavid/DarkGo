@@ -7,7 +7,7 @@
 *****************************************************/
 
 using System;
-public class PETools  
+public class CommonTool
 {
     public static int RandomInt(int min, int max, Random rd = null) {
         if (rd == null) {

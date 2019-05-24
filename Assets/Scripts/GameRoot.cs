@@ -12,8 +12,12 @@ public class GameRoot : MonoBehaviour
 {
     public static GameRoot Instance;
 
+    //服务层
     public ResSvc mResSvc;
     public AudioSvc mAudioSvc;
+    public NetSvc mNetSvc;
+
+    //业务层
     public LoginSys mLoginSys;
 
 
@@ -21,6 +25,7 @@ public class GameRoot : MonoBehaviour
     public LoadingWnd mLoadingWnd;
     public LoginWnd mLoginWnd;
     public DynamicTipsWnd mDynamicTipsWnd;
+    public CreateWnd mCreateWnd;
 
     private void Awake()
     {
@@ -34,12 +39,14 @@ public class GameRoot : MonoBehaviour
         mLoadingWnd = transform.Find("UIRoot/LoadingWnd").GetComponent<LoadingWnd>();
         mLoginWnd = transform.Find("UIRoot/LoginWnd").GetComponent<LoginWnd>();
         mDynamicTipsWnd = transform.Find("UIRoot/DynamicTips").GetComponent<DynamicTipsWnd>();
+        mCreateWnd = transform.Find("UIRoot/CreateWnd").GetComponent<CreateWnd>();
 
         mResSvc = GetComponent<ResSvc>();
-        mResSvc.Init();
-
+        mResSvc.Init(); 
         mAudioSvc = GetComponent<AudioSvc>();
         mAudioSvc.Init();
+        mNetSvc = GetComponent<NetSvc>();
+        mNetSvc.Init();
 
         mLoginSys = GetComponent<LoginSys>();
         mLoginSys.Init();
