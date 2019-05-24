@@ -48,11 +48,12 @@ public class LoginSys : SystemRoot
     public void RspLogin(NetMsg msg)
     {
         //如果服务器返回成功，则关闭登陆面板，打开角色创建面板或主城界面
-        Debug.Log("RspLogin");
-        RspLogin rspData = msg.RspLogin;
-        if (rspData.data.Name == "") {
-            mGameRoot.mLoginWnd.SetWndState(false);
-            mGameRoot.mCreateWnd.SetWndState();
+        RspLogin rspData = msg.RspLogin; 
+        
+        if (string.IsNullOrEmpty(rspData.data.Name)) {
+            Debug.Log("00000");
         }
+        mGameRoot.mLoginWnd.SetWndState(false);
+        mGameRoot.mCreateWnd.SetWndState();
     }
 }

@@ -49,7 +49,7 @@ public class NetSvc : MonoBehaviour
     }
 
     public void AddMsg(NetMsg msg) {
-        lock (obj) {
+        lock (obj) { 
             msgQueue.Enqueue(msg);
         }
     }
@@ -58,21 +58,21 @@ public class NetSvc : MonoBehaviour
     {
         if (msgQueue.Count > 0) {
             NetMsg msg = msgQueue.Dequeue();
-            lock (obj) {
+            lock (obj) { 
                 HandleMsg(msg);
             }
         }
     }
 
-    private void HandleMsg(NetMsg msg) {
-        Debug.Log("HandleMsg");
+    private void HandleMsg(NetMsg msg) { 
         if (msg.err != (int)ErrorCode.None) {
             HandleErrorCode((ErrorCode)msg.err);
             return;
-        }
+        } 
         switch ((MsgType)msg.cmd)
         {  
             case MsgType.RspLogin:
+                
                 LoginSys.Instance.RspLogin(msg);
                 break; 
         }

@@ -19,7 +19,7 @@ public class ClientSession :  PESession<NetMsg>
 
     protected override void OnReciveMsg(NetMsg msg)
     {
-        Debug.Log(((MsgType)(msg.cmd)).ToString());
+        Debug.Log("OnReciveMsg:  " + ((MsgType)(msg.cmd)).ToString());
         NetSvc.Instance.AddMsg(msg);
     }
 
