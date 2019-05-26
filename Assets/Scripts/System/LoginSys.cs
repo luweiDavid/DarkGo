@@ -32,7 +32,7 @@ public class LoginSys : SystemRoot
 
     public void ReqLogin(string _acct, string _password)
     {
-        NetMsg msg = new NetMsg
+        NetMsg newMsg = new NetMsg
         {
             cmd = (int)MsgType.ReqLogin,
             ReqLogin = new ReqLogin
@@ -41,7 +41,7 @@ public class LoginSys : SystemRoot
                 password = _password,
             }
         };
-        mNetSvc.SendMsg(msg);
+        mNetSvc.SendMsg(newMsg);
         Debug.Log("ReqLogin");
     }
 
@@ -51,9 +51,30 @@ public class LoginSys : SystemRoot
         RspLogin rspData = msg.RspLogin; 
         
         if (string.IsNullOrEmpty(rspData.data.Name)) {
-            Debug.Log("00000");
+            mGameRoot.mLoginWnd.SetWndState(false);
+            mGameRoot.mCreateWnd.SetWndState();
+        } 
+    }
+
+    public void ReqRename(string name) {
+        NetMsg newMsg = new NetMsg
+        {
+            cmd=(int)MsgType.ReqRename,
+        };
+
+        if (!string.IsNullOrEmpty(name)) {
+            newMsg.ReqRename = new ReqRename {
+                name=name,
+            };
+            mNetSvc.SendMsg(newMsg);
         }
-        mGameRoot.mLoginWnd.SetWndState(false);
-        mGameRoot.mCreateWnd.SetWndState();
+        Debug.Log("ReqRename");
+    }
+
+    public void RspRename(NetMsg msg) {
+        RspRename rspData = msg.RspRename;
+
+        //todo
+        Debug.Log("RspRename  "+ rspData.name);
     }
 }

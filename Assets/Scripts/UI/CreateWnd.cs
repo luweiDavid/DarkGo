@@ -39,6 +39,9 @@ public class CreateWnd : WindowRoot
     }
     private void OnEnterBtnClick() {
         mAudioSvc.PlayUIAudio(Constant.AudioName_BtnClick);
-
+         
+        if (!string.IsNullOrEmpty(IptName.text) ) {
+            LoginSys.Instance.ReqRename(IptName.text);
+        } 
     }
 }
