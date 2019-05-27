@@ -32,13 +32,13 @@ public class CreateWnd : WindowRoot
     }
 
     private void OnRandNameBtnClick() {
-        mAudioSvc.PlayUIAudio(Constant.AudioName_BtnClick);
+        mAudioSvc.PlayUIAudio(Constant.Audio_BtnClick);
 
         string name = mResSvc.GetRandName();
         IptName.text = name; 
     }
     private void OnEnterBtnClick() {
-        mAudioSvc.PlayUIAudio(Constant.AudioName_BtnClick);
+        mAudioSvc.PlayUIAudio(Constant.Audio_BtnClick);
          
         if (!string.IsNullOrEmpty(IptName.text) ) {
             LoginSys.Instance.ReqRename(IptName.text);

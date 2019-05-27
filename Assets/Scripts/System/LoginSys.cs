@@ -21,11 +21,11 @@ public class LoginSys : SystemRoot
     }
     public void EnterLogin() {
 
-        mResSvc.AsyncLoadScene(Constant.SceneName_Login, () =>
+        mResSvc.AsyncLoadScene(Constant.Scene_Login, () =>
         {
             //打开登陆面板 
             mGameRoot.mLoginWnd.SetWndState(true);
-            mAudioSvc.PlayBgAudio(Constant.AudioName_BgLogin, true); 
+            mAudioSvc.PlayBgAudio(Constant.Audio_BgLogin, true); 
         }); 
 
     }
@@ -48,12 +48,21 @@ public class LoginSys : SystemRoot
     public void RspLogin(NetMsg msg)
     {
         //如果服务器返回成功，则关闭登陆面板，打开角色创建面板或主城界面
-        RspLogin rspData = msg.RspLogin; 
-        
-        if (string.IsNullOrEmpty(rspData.data.Name)) {
-            mGameRoot.mLoginWnd.SetWndState(false);
+        RspLogin rspData = msg.RspLogin;
+
+        mGameRoot.mLoginWnd.SetWndState(false);
+        if (string.IsNullOrEmpty(rspData.data.Name))
+        {
+            //新账号 
             mGameRoot.mCreateWnd.SetWndState();
-        } 
+        }
+        else {
+            //旧帐号
+            MainCitySys.Instance.EnterMainCity();
+        }
+
+        //保存玩家数据 
+        mGameRoot.SetPlayerData(rspData.data);
     }
 
     public void ReqRename(string name) {
@@ -74,7 +83,9 @@ public class LoginSys : SystemRoot
     public void RspRename(NetMsg msg) {
         RspRename rspData = msg.RspRename;
 
-        //todo
-        Debug.Log("RspRename  "+ rspData.name);
+        mGameRoot.mCreateWnd.SetWndState(false);
+        MainCitySys.Instance.EnterMainCity();
+
+        Debug.Log("RspRename : "+msg.RspRename.name);
     }
 }

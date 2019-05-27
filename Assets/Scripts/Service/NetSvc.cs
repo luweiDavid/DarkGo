@@ -66,6 +66,7 @@ public class NetSvc : MonoBehaviour
 
     private void HandleMsg(NetMsg msg) { 
         if (msg.err != (int)ErrorCode.None) {
+            Debug.Log("网络返回错误码: "+((ErrorCode)(msg.err)).ToString());
             HandleErrorCode((ErrorCode)msg.err);
             return;
         } 
@@ -90,7 +91,14 @@ public class NetSvc : MonoBehaviour
                 break;
             case ErrorCode.InvalidPassword:
                 GameRoot.Instance.AddTips(Language.GetString(4));
-                break; 
+                break;
+            case ErrorCode.NameExisted:
+                GameRoot.Instance.AddTips(Language.GetString(6)); 
+                break;
+            case ErrorCode.UpdateDBFailed:
+                Debug.Log("数据库更新失败");
+                GameRoot.Instance.AddTips(Language.GetString(7));
+                break;
         }
     }
 

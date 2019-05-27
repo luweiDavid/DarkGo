@@ -16,4 +16,8 @@ public class CommonTool
         int value = rd.Next(min, max + 1);
         return value;
     }
+
+
+ 
+
 }

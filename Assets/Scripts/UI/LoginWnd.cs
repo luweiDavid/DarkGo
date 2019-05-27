@@ -46,7 +46,7 @@ public class LoginWnd : WindowRoot
 
     private void OnEnterBtnClick()
     {
-        mAudioSvc.PlayUIAudio(Constant.AudioName_BtnLogin);
+        mAudioSvc.PlayUIAudio(Constant.Audio_BtnLogin);
         string _acct = iptAccount.text;
         string _password = iptPassword.text; 
 
@@ -60,7 +60,7 @@ public class LoginWnd : WindowRoot
     }
 
     private void OnNoticeBtnClick() {
-        mAudioSvc.PlayUIAudio(Constant.AudioName_BtnClick);
+        mAudioSvc.PlayUIAudio(Constant.Audio_BtnClick);
 
         mGameRoot.AddTips(Language.GetString(1000));
     }
