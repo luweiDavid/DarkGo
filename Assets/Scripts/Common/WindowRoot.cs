@@ -6,7 +6,9 @@
 	功能：UI窗口基类
 *****************************************************/
 
+using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class WindowRoot : MonoBehaviour
@@ -43,7 +45,41 @@ public class WindowRoot : MonoBehaviour
         mNetSvc = null;
     }
 
+    #region 点击拖拽事件
+    private T GetComponentExt<T>(GameObject go) where T:Component{
+        T t = go.GetComponent<T>();
+        if (t == null) {
+            t = go.AddComponent<T>();
+        }
+        return t;
+    }
 
+    protected virtual void RegisterPointerDownCB(GameObject go,Action<PointerEventData> cb) {
+        if (cb != null && go != null) {
+            ListenerExt listener = GetComponentExt<ListenerExt>(go);
+            listener.pointerDownCB = cb;
+        }
+    }
+
+    protected virtual void RegisterPointerUpCB(GameObject go, Action<PointerEventData> cb)
+    {
+        if (cb != null && go != null)
+        {
+            ListenerExt listener = GetComponentExt<ListenerExt>(go);
+            listener.pointerUpCB = cb;
+        }
+    }
+
+    protected virtual void RegisterDragCB(GameObject go, Action<PointerEventData> cb)
+    {
+        if (cb != null && go != null)
+        {
+            ListenerExt listener = GetComponentExt<ListenerExt>(go);
+            listener.onDragCB = cb;
+        }
+    }
+
+    #endregion
 
     #region TOOL FUNC
     protected void SetActive(GameObject go, bool isActive = true) {

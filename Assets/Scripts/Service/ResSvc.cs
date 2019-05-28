@@ -23,7 +23,8 @@ public class ResSvc : MonoBehaviour
     {
         Instance = this;
 
-        InitRandNameCfg(); 
+        InitRandNameCfg(PathDefine.RdName);
+        InitMapCfg(PathDefine.Map_V1); 
     }
 
     /// <summary>
@@ -70,12 +71,78 @@ public class ResSvc : MonoBehaviour
 
 
 
+    #region  初始化配置表 -- 地图配置
+
+    private Dictionary<int, CfgMapData> mapDataDic = new Dictionary<int, CfgMapData>();
+
+    private void InitMapCfg(string path)
+    {
+        TextAsset ta = Resources.Load<TextAsset>(path);
+        if (!ta)
+        {
+            Debug.LogError(path + " 路径错误");
+        }
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.LoadXml(ta.text);
+
+        XmlNodeList nodeList = xmlDoc.SelectSingleNode("root").ChildNodes;
+
+        for (int i = 0; i < nodeList.Count; i++)
+        {
+            XmlElement ele = nodeList[i] as XmlElement;
+            if (ele.GetAttribute("ID") == null)
+            {
+                continue;
+            }
+            int ID = Convert.ToInt32(ele.GetAttribute("ID"));
+
+            CfgMapData mapData = new CfgMapData
+            {
+                ID = ID,
+            };
+
+            foreach (XmlElement subEle in nodeList[i].ChildNodes)
+            { 
+                string str = subEle.Name;
+                switch (str)
+                {
+                    case "mapName":
+                        mapData.mapName = subEle.InnerText;
+                        break;
+                    case "sceneName":
+                        mapData.sceneName = subEle.InnerText;
+                        break;
+                    case "power":
+                        mapData.power = int.Parse(subEle.InnerText);
+                        break;
+                    case "mainCamPos":
+                        string[] pos1 = subEle.InnerText.Split(',');
+                        mapData.mainCamPos = new Vector3(float.Parse(pos1[0]), float.Parse(pos1[1]), float.Parse(pos1[2]));
+                        break;
+                    case "mainCamRote":
+                        string[] pos2 = subEle.InnerText.Split(',');
+                        mapData.mainCamRote = new Vector3(float.Parse(pos2[0]), float.Parse(pos2[1]), float.Parse(pos2[2]));
+                        break;
+                    case "playerBornPos":
+                        string[] pos3 = subEle.InnerText.Split(','); 
+                        mapData.playerBornPos = new Vector3(float.Parse(pos3[0]), float.Parse(pos3[1]), float.Parse(pos3[2]));
+                        break;
+                    case "playerBornRote":
+                        string[] pos4 = subEle.InnerText.Split(','); 
+;                        mapData.playerBornRote = new Vector3(float.Parse(pos4[0]), float.Parse(pos4[1]), float.Parse(pos4[2]));
+                        break;  
+                }
+            }
+            mapDataDic.Add(ID, mapData);
+        }
+    }
+
+    #endregion
 
 
 
 
-
-    #region  读取配置表
+    #region  初始化配置表 -- 随机名字配置
     public string GetRandName(bool man = true) {
         string name = "";
         name = surNameList[CommonTool.RandomInt(0, surNameList.Count - 1)];
@@ -88,17 +155,15 @@ public class ResSvc : MonoBehaviour
         }
 
         return name;
-    }
-
-
+    } 
 
     private List<string> surNameList = new List<string>();
     private List<string> manNameList = new List<string>();
     private List<string> womanNameList = new List<string>(); 
-    private void InitRandNameCfg() {
-        TextAsset ta = Resources.Load<TextAsset>(PathDefine.RdName);
+    private void InitRandNameCfg(string path) {
+        TextAsset ta = Resources.Load<TextAsset>(path);
         if (!ta) {
-            Debug.LogError(PathDefine.RdName + " 路径错误");
+            Debug.LogError(path + " 路径错误");
         }
         XmlDocument xmlDoc = new XmlDocument();
         xmlDoc.LoadXml(ta.text);

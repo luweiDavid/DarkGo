@@ -27,4 +27,9 @@ public class Constant
     public const string Audio_BtnLogin = "uiLoginBtn";
     public const string Audio_OpenPage = "uiOpenPage";
 
+
+    public const int RefScreenWidth = 1334;
+    public const int RefScreenHeight = 750;
+    public const int RockingBarDis = 90;
+
 }

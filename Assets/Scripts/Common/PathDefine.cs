@@ -10,7 +10,7 @@ public class PathDefine
 {
     #region 配置文件路径
     public const string RdName = "Configs/rdname";
-
+    public const string Map_V1 = "Configs/map_v1";
 
     #endregion
 }

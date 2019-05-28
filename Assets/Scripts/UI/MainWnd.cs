@@ -10,6 +10,7 @@ using Protocol;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.EventSystems;
 
 public class MainWnd : WindowRoot
 {
@@ -34,7 +35,10 @@ public class MainWnd : WindowRoot
     private Button btnChat; 
 
     private Image imgExpFill;
-     
+    private RectTransform imgFillRectTr;
+    private GridLayoutGroup dotGridLayoutGroup;
+
+    #region 动画相关属性
     private RectTransform upMaskRectTr;
     private RectTransform leftMaskRectTr;
     private RectTransform btnCtrlStateTr;
@@ -53,6 +57,20 @@ public class MainWnd : WindowRoot
     private CanvasGroup leftmaskCG = null;
     private float tweenTime;
 
+    private bool useDoTween = false;
+    private Animation rightBottomAnim;
+    #endregion
+
+    #region 摇杆相关属性
+    private RectTransform rockingBarAreaTr;
+    private RectTransform rockingBarBgTr;
+    private RectTransform rockingBarPointTr;
+
+    private Vector2 originPos_rbBg;
+
+    private Vector2 pointerStartPos; 
+    #endregion
+
     private void Awake()
     {
         txtName = transform.Find("LeftTopPanel/ImgHead/TxtName").GetComponent<Text>();
@@ -60,7 +78,7 @@ public class MainWnd : WindowRoot
         txtPower = transform.Find("LeftTopPanel/BgPower/TxtPower").GetComponent<Text>();
         txtLevel = transform.Find("LeftTopPanel/BgLv/TxtLv").GetComponent<Text>(); 
         txtVip = transform.Find("RightTopPanel/BtnVip/TxtVip").GetComponent<Text>();
-        txtExpPercent = transform.Find("MiddleBottomPanel/BgExp/Bg/TxtExpPercent").GetComponent<Text>();
+        txtExpPercent = transform.Find("MiddleBottomPanel/TxtExpPercent").GetComponent<Text>();
 
         btnUpfight = transform.Find("LeftTopPanel/BgFight/BtnUpfight").GetComponent<Button>();
         btnBuy = transform.Find("LeftTopPanel/BgPower/BtnBuy").GetComponent<Button>();
@@ -72,9 +90,15 @@ public class MainWnd : WindowRoot
         btnCast = transform.Find("RightBottomPanel/ImgLeftMask/BtnCast").GetComponent<Button>();
         btnStrengthen = transform.Find("RightBottomPanel/ImgLeftMask/BtnStrengthen").GetComponent<Button>();
         btnCtrlState = transform.Find("RightBottomPanel/BtnCtrlState").GetComponent<Button>();
-        btnChat = transform.Find("MiddleBottomPanel/BgChat/BtnChat").GetComponent<Button>();
+        btnChat = transform.Find("MiddleBottomPanel/BgChat/BtnChat").GetComponent<Button>(); 
+        imgExpFill = transform.Find("MiddleBottomPanel/ImgFill").GetComponent<Image>();
+        dotGridLayoutGroup = transform.Find("MiddleBottomPanel/ImgFill/DotContainer").GetComponent<GridLayoutGroup>();
 
-        imgExpFill = transform.Find("MiddleBottomPanel/BgExp/Bg/ImgFill").GetComponent<Image>();
+        rockingBarAreaTr = transform.Find("LeftBottomPanel/RockingBarArea").GetComponent<RectTransform>();
+        rockingBarBgTr = transform.Find("LeftBottomPanel/ImgRockingBar").GetComponent<RectTransform>();
+        rockingBarPointTr = transform.Find("LeftBottomPanel/ImgRockingBar/ImgPoint").GetComponent<RectTransform>();
+        imgFillRectTr = imgExpFill.GetComponent<RectTransform>();
+        originPos_rbBg = rockingBarBgTr.anchoredPosition;
 
         upMaskRectTr = transform.Find("RightBottomPanel/ImgUpMask").GetComponent<RectTransform>();
         leftMaskRectTr = transform.Find("RightBottomPanel/ImgLeftMask").GetComponent<RectTransform>();
@@ -87,9 +111,24 @@ public class MainWnd : WindowRoot
         targetWidth = constantWidth * leftMaskCount + (leftMaskCount - 1) * 30;
         upmaskCG = upMaskRectTr.GetComponent<CanvasGroup>();
         leftmaskCG = leftMaskRectTr.GetComponent<CanvasGroup>();
-        tweenTime = 0.2f;
+        tweenTime = 0.2f; 
+        rightBottomAnim = transform.Find("RightBottomPanel").GetComponent<Animation>();
 
-        AddClickListener(); 
+        AddClickListener();
+        RegisterRockingBarListener();
+        SetExpDotXSpacing();
+    }
+
+    /// <summary>
+    /// todo
+    /// </summary>
+    private void SetExpDotXSpacing() {
+        float hRatio = (float)Constant.RefScreenHeight / Screen.height;
+        float realFillWidth = (Mathf.Abs(imgFillRectTr.offsetMin.x) + Mathf.Abs(imgFillRectTr.offsetMax.x));
+        float realFllWidthRatio = realFillWidth / (float)Constant.RefScreenWidth;
+        float realScreenWidth = Screen.width * hRatio * realFllWidthRatio;
+        float xSpacing = realScreenWidth / 11; 
+        dotGridLayoutGroup.spacing = new Vector2(xSpacing, 0);
     }
 
     protected override void InitWnd()
@@ -105,14 +144,13 @@ public class MainWnd : WindowRoot
             SetText(txtLevel, data.Level);
             SetExp(data);
         }
-       
 
-        isOpenRightBottomPanel = true; 
-        OpenRightBottomPanel();
+        useDoTween = true;
+        OnBtnCtrlState();
+
+        SetActive(rockingBarPointTr, false);
     }
-
-
-
+     
     /// <summary>
     /// 设置经验条显示
     /// </summary>
@@ -133,17 +171,83 @@ public class MainWnd : WindowRoot
     private void OnBtnTask() { }
     private void OnBtnCast() { }
     private void OnBtnStrengthen() { }
-    private void OnBtnCtrlState() { 
+    private void OnBtnCtrlState() {
+        //用两种方式播放动画，1：DOTween， 2，Animation
+        //用DOTween的话就比较灵活，后续加入新的item也不用修改代码
+        //用Animation的话，加了新的item就要重新做动画 
+        mAudioSvc.PlayUIAudio(Constant.Audio_BtnExten);
         isOpenRightBottomPanel = !isOpenRightBottomPanel;
-        if (isOpenRightBottomPanel)
+        if (!useDoTween)
         {
-            OpenRightBottomPanel();
+            //AnimationClip clip = null; 
+            //if (isOpenRightBottomPanel)
+            //{
+            //    clip = rightBottomAnim.GetClip("MainWnd_OpenRightPanel");  
+            //}
+            //else {
+            //    clip = rightBottomAnim.GetClip("MainWnd_CloseRightPanel"); 
+            //}
+            //rightBottomAnim.Play(clip.name);
         }
         else {
-            CloseRightBottomPanel();
+            if (isOpenRightBottomPanel)
+            {
+                OpenRightBottomPanel();
+            }
+            else
+            {
+                CloseRightBottomPanel();
+            }
         } 
     }
     private void OnBtnChat() { }
+     
+     
+    /// <summary>
+    /// 摇杆事件注册
+    /// </summary>
+    private void RegisterRockingBarListener() {
+        //这里需要做适配， 根据CanvasScaler的Match属性，根据宽高所占比例，本项目是根据高度
+        float hRatio = Constant.RefScreenHeight/(float)Screen.height;
+        float wRatio = Constant.RefScreenWidth/(float)Screen.width;
+        float ratio = hRatio; 
+
+        RegisterPointerDownCB(rockingBarAreaTr.gameObject, (PointerEventData evtData) =>
+        {
+            pointerStartPos = evtData.position;
+            rockingBarBgTr.anchoredPosition = new Vector2(evtData.position.x * ratio, evtData.position.y * ratio);
+            SetActive(rockingBarPointTr);
+            rockingBarPointTr.anchoredPosition = Vector2.zero;
+        });
+
+        RegisterDragCB(rockingBarAreaTr.gameObject, (PointerEventData evtData) =>
+        {
+            Vector2 endPos = evtData.position;
+            Vector2 dir = endPos - pointerStartPos;
+            float dis = dir.magnitude;
+
+            if (dis > Constant.RockingBarDis)
+            {
+                Vector2 adjustDir = Vector2.ClampMagnitude(dir, Constant.RockingBarDis);
+                rockingBarPointTr.anchoredPosition = adjustDir;
+            }
+            else {
+                rockingBarPointTr.anchoredPosition = dir;
+            } 
+        });
+
+        RegisterPointerUpCB(rockingBarAreaTr.gameObject, (PointerEventData evtData) =>
+        {
+            rockingBarBgTr.anchoredPosition = originPos_rbBg;
+            SetActive(rockingBarPointTr, false);
+            rockingBarPointTr.anchoredPosition = Vector2.zero;
+        });
+    }
+
+
+     
+
+
 
     private void AddClickListener()
     {

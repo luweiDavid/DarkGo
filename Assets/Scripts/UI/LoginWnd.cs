@@ -53,6 +53,8 @@ public class LoginWnd : WindowRoot
         if (!string.IsNullOrEmpty(_acct) && !string.IsNullOrEmpty(_password))
         { 
             LoginSys.Instance.ReqLogin(_acct, _password);
+            PlayerPrefs.SetString("Account",_acct);
+            PlayerPrefs.SetString("Password", _password);
         }
         else {
             mGameRoot.AddTips(Language.GetString(1));
