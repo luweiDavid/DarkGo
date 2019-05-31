@@ -84,9 +84,12 @@ public class WindowRoot : MonoBehaviour
 
 
     #region TOOL FUNC
-    protected void SetSprite(Image img, string path) {
+    protected void SetSprite(Image img, string path, bool setNativeSize = true) {
         Sprite spt = mResSvc.GetSprite(path, true);
         img.sprite = spt;
+        if (setNativeSize) {
+            img.SetNativeSize();
+        } 
     }
 
 

@@ -3,7 +3,7 @@
 	作者：David
     邮箱: 1785275942@qq.com
     日期：2019/5/29 16:6:45
-	功能：Nothing
+	功能：属性详情界面
 *****************************************************/
 
 using Protocol;
@@ -87,6 +87,7 @@ public class ActorInfoWnd : WindowRoot
         UpdateData(pd);
 
         SetDetailPanelActive(false);
+        RegisterCharShowListener();
     }
 
     private void UpdateData(PlayerData data) {

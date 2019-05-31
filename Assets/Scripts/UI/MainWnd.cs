@@ -37,6 +37,8 @@ public class MainWnd : WindowRoot
     private Image imgExpFill;
     private RectTransform imgFillRectTr;
     private GridLayoutGroup dotGridLayoutGroup;
+
+    private bool hadGetComponent = false;
     #endregion
 
     #region 动画相关属性
@@ -72,7 +74,7 @@ public class MainWnd : WindowRoot
     private Vector2 pointerStartPos;
     #endregion
 
-    private CfgGuideData curGuideData;
+    private CfgGuideData curGuideData; 
 
 
     private void Awake()
@@ -122,6 +124,8 @@ public class MainWnd : WindowRoot
         AddClickListener();
         RegisterRockingBarListener();
         SetExpDotXSpacing();
+
+        hadGetComponent = true;
     }
 
     /// <summary>
@@ -141,33 +145,65 @@ public class MainWnd : WindowRoot
         base.InitWnd();
 
         PlayerData data = mGameRoot.GetPlayerData();
-        if (data != null)
-        {
-            SetText(txtName, data.Name);
-            SetText(txtFight, PECommonTool.GetFight(data));
-            SetText(txtPower, string.Format(Language.GetString(5), data.Power, PECommonTool.GetPowerLimit(data.Level)));
-            SetText(txtLevel, data.Level);
-            SetExp(data);
-            curGuideData = mResSvc.GetGuideData(data.GuideID);
-        }
+        UpdateData(data);
 
         useDoTween = true;
         OnBtnCtrlState(); 
-        SetActive(rockingBarPointTr, false);
-         
-        UpateGuideData();
+        SetActive(rockingBarPointTr, false);  
     }
-     
-    /// <summary>
-    /// 设置经验条显示
-    /// </summary>
-    /// <param name="data"></param>
-    private void SetExp(PlayerData data) {
-        float percent = (float)data.Experience / PECommonTool.GetExpUpvalue(data.Level);
 
-        SetText(txtExpPercent, Mathf.CeilToInt(percent * 100) + "%");
-        imgExpFill.fillAmount = percent;
+    public void UpdateData(PlayerData data) {
+        if (data != null && hadGetComponent)
+        {
+            //更新角色属性的显示 
+            SetText(txtName, data.Name);
+            SetText(txtFight, PECommonTool.GetFight(data));
+            SetText(txtPower, string.Format(Language.GetString(5), data.Power, PECommonTool.GetPowerLimit(data.Level)));
+            SetText(txtLevel, data.Level);   
+            float percent = (float)data.Experience / PECommonTool.GetExpUpvalue(data.Level); 
+            SetText(txtExpPercent, Mathf.CeilToInt(percent * 100) + "%");
+            imgExpFill.fillAmount = percent;
+
+            //更新引导数据
+            curGuideData = mResSvc.GetGuideData(data.GuideID); 
+            UpateGuideData();
+        }
     }
+
+    /// <summary>
+    /// 更新引导相关信息
+    /// </summary>
+    private void UpateGuideData()
+    {
+        if (curGuideData == null)
+        {
+            return;
+        }
+
+        int npcId = curGuideData.npcID;
+        Image img = btnAudoTask.GetComponent<Image>();
+        string sptPath = "";
+        switch (npcId)
+        {
+            case (int)GuideNpcIDType.NpcWiseman:
+                sptPath = PathDefine.WisemanIcon;
+                break;
+            case (int)GuideNpcIDType.NpcGeneral:
+                sptPath = PathDefine.GeneralIcon;
+                break;
+            case (int)GuideNpcIDType.NpcArtisan:
+                sptPath = PathDefine.ArtisanIcon;
+                break;
+            case (int)GuideNpcIDType.NpcTrader:
+                sptPath = PathDefine.TraderIcon;
+                break;
+            default:
+                sptPath = PathDefine.TaskIcon;
+                break;
+        }
+        SetSprite(img, sptPath);
+    }
+
 
     private void OnBtnHead() {  
         mGameRoot.mActorInfoWnd.SetWndState();
@@ -180,7 +216,7 @@ public class MainWnd : WindowRoot
     private void OnBtnCharge() { }
     private void OnBtnAutoTask() {
         //引导任务按钮
-        MainCitySys.Instance.ExecuteGuideTask(curGuideData);
+        MainCitySys.Instance.StartGuideTask(curGuideData);
     }
     private void OnBtnFuBen() { }
     private void OnBtnTask() { }
@@ -217,41 +253,7 @@ public class MainWnd : WindowRoot
     }
     private void OnBtnChat() { }
      
-     
-
-
-     
-
-
-    private void UpateGuideData()
-    {
-        if (curGuideData == null) {
-            return;
-        }
-
-        int npcId = curGuideData.npcID;
-        Image img = btnAudoTask.GetComponent<Image>();
-        string sptPath = "";
-        switch (npcId)
-        {
-            case (int)GuideNpcIDType.NpcWiseman:
-                sptPath = PathDefine.WisemanIcon;
-                break;
-            case (int)GuideNpcIDType.NpcGeneral:
-                sptPath = PathDefine.GeneralIcon;
-                break;
-            case (int)GuideNpcIDType.NpcArtisan:
-                sptPath = PathDefine.ArtisanIcon;
-                break;
-            case (int)GuideNpcIDType.NpcTrader:
-                sptPath = PathDefine.TraderIcon;
-                break;
-        }
-        SetSprite(img, sptPath);
-    }
-
-
-
+      
 
 
 

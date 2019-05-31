@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     public void Init()
     {
         anim = GetComponent<Animator>();
-        //charCtrl = GetComponent<CharacterController>();
+        charCtrl = GetComponent<CharacterController>();
         mainCamTr = Camera.main.transform;
         camOffset = transform.position - mainCamTr.position;
 
@@ -78,15 +78,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnMove() {
         //调整方向
-        //float angle = Vector2.SignedAngle(moveDir, new Vector2(0, 1)) + mainCamTr.eulerAngles.y;
-        //transform.localEulerAngles = new Vector3(0, angle, 0);
+        float angle = Vector2.SignedAngle(moveDir, new Vector2(0, 1)) + mainCamTr.eulerAngles.y;
+        transform.localEulerAngles = new Vector3(0, angle, 0);
 
-        //charCtrl.Move(Time.deltaTime * Constant.PlayerMoveSpeed * transform.forward);
+        charCtrl.Move(Time.deltaTime * Constant.PlayerMoveSpeed * transform.forward);
 
-        //if (mainCamTr != null)
-        //{
-        //    mainCamTr.position = transform.position - camOffset;
-        //}
+        if (mainCamTr != null)
+        {
+            mainCamTr.position = transform.position - camOffset;
+        }
     }
 
     public void SetMainCamFollowPlayer() {

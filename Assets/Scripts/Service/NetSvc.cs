@@ -3,7 +3,7 @@
 	作者：David
     邮箱: 1785275942@qq.com
     日期：2019/5/22 14:34:53
-	功能：Nothing
+	功能：网络连接服务系统
 *****************************************************/
 
 using UnityEngine;
@@ -78,6 +78,9 @@ public class NetSvc : MonoBehaviour
             case MsgType.RspRename:
                 LoginSys.Instance.RspRename(msg);
                 break;
+            case MsgType.RspGuide:
+                MainCitySys.Instance.RspGuide(msg);
+                break;
         }
     }
 
@@ -96,8 +99,12 @@ public class NetSvc : MonoBehaviour
                 GameRoot.Instance.AddTips(Language.GetString(6)); 
                 break;
             case ErrorCode.UpdateDBFailed:
-                Debug.Log("数据库更新失败");
+                PECommonTool.Log("数据库更新失败");
                 GameRoot.Instance.AddTips(Language.GetString(7));
+                break;
+            case ErrorCode.ServerDataError:
+                PECommonTool.Log("数据库更新失败");
+                GameRoot.Instance.AddTips(Language.GetString(8));
                 break;
         }
     }

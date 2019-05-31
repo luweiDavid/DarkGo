@@ -37,7 +37,8 @@ public class GameRoot : MonoBehaviour
     public MainWnd mMainWnd;
     [HideInInspector]
     public ActorInfoWnd mActorInfoWnd;
-
+    [HideInInspector]
+    public GuideWnd mGuideWnd;
 
     //数据层
     private PlayerData mPlayerData;
@@ -58,6 +59,7 @@ public class GameRoot : MonoBehaviour
         mCreateWnd = transform.Find("UIRoot/CreateWnd").GetComponent<CreateWnd>();
         mMainWnd = transform.Find("UIRoot/MainWnd").GetComponent<MainWnd>();
         mActorInfoWnd = transform.Find("UIRoot/ActorInfoWnd").GetComponent<ActorInfoWnd>();
+        mGuideWnd = transform.Find("UIRoot/GuideWnd").GetComponent<GuideWnd>();
         #endregion
 
         #region  服务层初始化
@@ -88,6 +90,8 @@ public class GameRoot : MonoBehaviour
 
     public void SetPlayerData(PlayerData data) { 
         mPlayerData = data;
+
+        MainCitySys.Instance.UpdateMainWnd(data);
     }
 
 

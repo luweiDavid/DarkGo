@@ -35,13 +35,13 @@ public class Constant
     public const int RefScreenHeight = 750;
     public const int RockingBarDis = 90;
 
-    public const float PlayerMoveSpeed = 6;
-    public const float MonsterMoveSpeed = 3;
+    public const float PlayerMoveSpeed = 8;
+    public const float MonsterMoveSpeed = 5;
 
 
     public const int MoveBlend = 1;
     public const int IdleBlend = 0;
-    public const float AccelerSpeed = 4;
+    public const float AccelerSpeed = 6;
 }
 
 

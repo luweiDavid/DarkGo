@@ -3,9 +3,10 @@
 	作者：David
     邮箱: 1785275942@qq.com
     日期：2019/5/27 10:59:41
-	功能：Nothing
+	功能：主城业务系统
 *****************************************************/
 
+using Protocol;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,11 +17,13 @@ public class MainCitySys : SystemRoot
     public PlayerController playerCtrl;
     private Transform playerCamTr;
 
+    #region 引导相关属性
     private CfgGuideData curGuideData;
-    private NavMeshAgent navAgent;
-
+    private NavMeshAgent navAgent; 
     private Transform[] npcPosTrArray;
- 
+    private bool isNavigation = false;
+    #endregion
+
     public override void Init()
     {
         base.Init();
@@ -71,7 +74,9 @@ public class MainCitySys : SystemRoot
         }
     }
 
-    public void SetPlayerMove(Vector3 dir) { 
+    public void SetPlayerMove(Vector3 dir) {
+        //用摇杆控制角色移动时，必须终止navAgent导航
+        StopNavigation();
         playerCtrl.MoveDir = dir;
     }
 
@@ -80,8 +85,8 @@ public class MainCitySys : SystemRoot
             playerCamTr = GameObject.FindGameObjectWithTag("PlayerCamera").transform;
         }
 
-        playerCamTr.localPosition = playerCtrl.transform.position + playerCtrl.transform.forward * 3.8f
-            + new Vector3(0, 1.2f, 0);
+        playerCamTr.localPosition = playerCtrl.transform.position + playerCtrl.transform.forward * 1.80423f
+            + new Vector3(0, 0.81f, 0);
         playerCamTr.localEulerAngles = new Vector3(0, 180 + playerCtrl.transform.localEulerAngles.y, 0);
         playerCamTr.localScale = Vector3.one;
         playerCamTr.gameObject.SetActive(true);
@@ -103,52 +108,147 @@ public class MainCitySys : SystemRoot
     }
 
 
-    #region  引导相关
-    private bool isNavigation = false;
-    public void ExecuteGuideTask(CfgGuideData data) {
-        if (data!=null){
+    #region  引导相关 
+    public void StartGuideTask(CfgGuideData data) {
+        if (data != null)
+        {
             curGuideData = data;
 
+            //有这样一种情况：就是点击自动任务按钮时，角色已经在目的地了，这时就会走dis<0.5f的逻辑
+            //因为一开始navAgent是被禁用的，所以需要打开，不然在调用isStopped属性时就会报错
+            navAgent.enabled = true;
             if (data.npcID != -1)
             {
                 //有目标npc时候，要启用导航组件进行寻路
                 float dis = Vector3.Distance(playerCtrl.transform.position, npcPosTrArray[data.npcID].position);
                 if (dis < 0.5f)
-                { 
+                {
                     isNavigation = false;
+                    navAgent.isStopped = true;
                     navAgent.enabled = false;
-                    navAgent.isStopped = true; 
                     playerCtrl.SetBlend(Constant.IdleBlend);
                     OpenGuideWnd();
                 }
-                else {
+                else
+                {
                     isNavigation = true;
                     navAgent.enabled = true;
-                    navAgent.speed = Constant.PlayerMoveSpeed; 
+                    navAgent.speed = Constant.PlayerMoveSpeed;
                     navAgent.SetDestination(npcPosTrArray[data.npcID].position);
                     playerCtrl.SetBlend(Constant.MoveBlend);
                 }
             }
-            else {
+            else
+            {
                 OpenGuideWnd();
             }
         }
+        else {
+            mGameRoot.AddTips(Language.GetString(15));
+        }
+    }
+
+    public void StopNavigation() { 
+        if (navAgent.enabled)
+        {
+            isNavigation = false;
+            navAgent.isStopped = true;
+            navAgent.enabled = false; 
+            playerCtrl.SetBlend(Constant.IdleBlend);
+        } 
     }
 
     private void Update()
     {
         if (isNavigation) {
-            playerCtrl.SetMainCamFollowPlayer();
+            playerCtrl.SetMainCamFollowPlayer(); 
+            float dis = Vector3.Distance(playerCtrl.transform.position, npcPosTrArray[curGuideData.npcID].position);
+            if (dis < 0.5f)
+            {
+                StopNavigation();
+                OpenGuideWnd();
+            }
         }
     }
 
-    private void OpenGuideWnd() {
-
-
+    private void OpenGuideWnd() { 
+        mGameRoot.mGuideWnd.SetWndState(true);
     }
+
+
+    private void ExecuteGuideTask()
+    { 
+        int actId = curGuideData.actID;
+        switch (actId)
+        {
+            case 0:
+                //与智者对话
+                mGameRoot.AddTips(string.Format(Language.GetString(14), curGuideData.coin, curGuideData.exp));
+                break;
+            case 1:
+                //
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            default:
+                break;
+        }
+    }
+
+
     #endregion
 
 
+    #region 面板刷新
+
+    public void UpdateMainWnd(PlayerData data) {
+        mGameRoot.mMainWnd.UpdateData(data);
+    }
+
+    #endregion
+
+
+
+
+
+
+
+
+
+
+
+    #region  网络请求相关
+    public void ReqGuide(int id) {
+        NetMsg newMsg = new NetMsg
+        {
+            cmd = (int)MsgType.ReqGuide,
+        };
+        newMsg.ReqGuide = new ReqGuide
+        {
+            guideId = id,
+        };
+
+        mNetSvc.SendMsg(newMsg);
+        Debug.Log("ReqGuide"); 
+    }
+
+    public void RspGuide(NetMsg msg) {
+        RspGuide rspData = msg.RspGuide;
+        
+        mGameRoot.SetPlayerData(rspData.data); 
+
+        //执行引导任务
+        ExecuteGuideTask();
+    }
+
+    
+    #endregion
 
 
 }

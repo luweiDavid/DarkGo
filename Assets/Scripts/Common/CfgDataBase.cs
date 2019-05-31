@@ -8,12 +8,12 @@
 
 using UnityEngine;
 
-public class CfgDataBase<T>
+public class BaseCfgData<T>
 {
     public int ID;
 }
 
-public class CfgMapData : CfgDataBase<CfgMapData> {
+public class CfgMapData : BaseCfgData<CfgMapData> {
 
     public string mapName;
     public string sceneName;
@@ -26,7 +26,7 @@ public class CfgMapData : CfgDataBase<CfgMapData> {
 }
 
 
-public class CfgGuideData : CfgDataBase<CfgGuideData>
+public class CfgGuideData : BaseCfgData<CfgGuideData>
 {
     public int npcID;
     public string dilogArr;

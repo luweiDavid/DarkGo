@@ -26,6 +26,13 @@ public class PathDefine
     public const string TraderIcon = "Textures/trader";
     public const string WisemanIcon = "Textures/wiseman";
 
+    public const string AssassinRoleImg = "Textures/assassin";
+    public const string WisemanRoleImg = "Textures/npc0";
+    public const string GeneralRoleImg = "Textures/npc1";
+    public const string ArtisanRoleImg = "Textures/npc2";
+    public const string TraderRoleImg = "Textures/npc3";
+    public const string DefaultGuideRoleImg = "Textures/npcguide";
+
 
     #endregion
 }
