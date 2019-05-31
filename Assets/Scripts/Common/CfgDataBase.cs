@@ -24,3 +24,31 @@ public class CfgMapData : CfgDataBase<CfgMapData> {
     public Vector3 playerBornRote;
 
 }
+
+
+public class CfgGuideData : CfgDataBase<CfgGuideData>
+{
+    public int npcID;
+    public string dilogArr;
+    public int actID;
+    public int coin;
+    public int exp;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

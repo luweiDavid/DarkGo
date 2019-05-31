@@ -35,6 +35,9 @@ public class GameRoot : MonoBehaviour
     public CreateWnd mCreateWnd;
     [HideInInspector]
     public MainWnd mMainWnd;
+    [HideInInspector]
+    public ActorInfoWnd mActorInfoWnd;
+
 
     //数据层
     private PlayerData mPlayerData;
@@ -54,6 +57,7 @@ public class GameRoot : MonoBehaviour
         mDynamicTipsWnd = transform.Find("UIRoot/DynamicTips").GetComponent<DynamicTipsWnd>();
         mCreateWnd = transform.Find("UIRoot/CreateWnd").GetComponent<CreateWnd>();
         mMainWnd = transform.Find("UIRoot/MainWnd").GetComponent<MainWnd>();
+        mActorInfoWnd = transform.Find("UIRoot/ActorInfoWnd").GetComponent<ActorInfoWnd>();
         #endregion
 
         #region  服务层初始化

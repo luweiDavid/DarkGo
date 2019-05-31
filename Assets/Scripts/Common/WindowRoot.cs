@@ -8,6 +8,7 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -81,7 +82,15 @@ public class WindowRoot : MonoBehaviour
 
     #endregion
 
+
     #region TOOL FUNC
+    protected void SetSprite(Image img, string path) {
+        Sprite spt = mResSvc.GetSprite(path, true);
+        img.sprite = spt;
+    }
+
+
+
     protected void SetActive(GameObject go, bool isActive = true) {
         go.SetActive(isActive);
     }

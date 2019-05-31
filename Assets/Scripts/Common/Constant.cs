@@ -13,6 +13,9 @@ public class Constant
     public const string Scene_GameRoot = "GameRoot";
     public const string Scene_MainCity = "MainCity";
 
+    //场景id
+    public const int Scene_MainCityID = 10000;
+
     //音乐名称
     public const string Audio_AssassinHit = "assassin_Hit";
     public const string Audio_BgHuangYe = "bgHuangYe"; 
@@ -32,4 +35,19 @@ public class Constant
     public const int RefScreenHeight = 750;
     public const int RockingBarDis = 90;
 
+    public const float PlayerMoveSpeed = 6;
+    public const float MonsterMoveSpeed = 3;
+
+
+    public const int MoveBlend = 1;
+    public const int IdleBlend = 0;
+    public const float AccelerSpeed = 4;
+}
+
+
+public enum GuideNpcIDType {
+    NpcWiseman = 0,
+    NpcGeneral,
+    NpcArtisan,
+    NpcTrader,
 }

@@ -14,14 +14,15 @@ using UnityEngine.EventSystems;
 
 public class MainWnd : WindowRoot
 {
+    #region  公共模属性
     private Text txtName;
     private Text txtFight;
     private Text txtPower;
     private Text txtLevel;
     private Text txtVip;
     private Text txtExpPercent;
-    //聊天窗口的txt todo
-
+    //聊天窗口的txt todo 
+    private Button btnHead;
     private Button btnUpfight;
     private Button btnBuy;
     private Button btnVip;
@@ -32,11 +33,11 @@ public class MainWnd : WindowRoot
     private Button btnCast;
     private Button btnStrengthen;
     private Button btnCtrlState;
-    private Button btnChat; 
-
+    private Button btnChat;  
     private Image imgExpFill;
     private RectTransform imgFillRectTr;
     private GridLayoutGroup dotGridLayoutGroup;
+    #endregion
 
     #region 动画相关属性
     private RectTransform upMaskRectTr;
@@ -68,18 +69,22 @@ public class MainWnd : WindowRoot
 
     private Vector2 originPos_rbBg;
 
-    private Vector2 pointerStartPos; 
+    private Vector2 pointerStartPos;
     #endregion
+
+    private CfgGuideData curGuideData;
+
 
     private void Awake()
     {
-        txtName = transform.Find("LeftTopPanel/ImgHead/TxtName").GetComponent<Text>();
+        txtName = transform.Find("LeftTopPanel/BtnHead/TxtName").GetComponent<Text>();
         txtFight = transform.Find("LeftTopPanel/BgFight/TxtFight").GetComponent<Text>(); 
         txtPower = transform.Find("LeftTopPanel/BgPower/TxtPower").GetComponent<Text>();
         txtLevel = transform.Find("LeftTopPanel/BgLv/TxtLv").GetComponent<Text>(); 
         txtVip = transform.Find("RightTopPanel/BtnVip/TxtVip").GetComponent<Text>();
         txtExpPercent = transform.Find("MiddleBottomPanel/TxtExpPercent").GetComponent<Text>();
 
+        btnHead = transform.Find("LeftTopPanel/BtnHead").GetComponent<Button>();
         btnUpfight = transform.Find("LeftTopPanel/BgFight/BtnUpfight").GetComponent<Button>();
         btnBuy = transform.Find("LeftTopPanel/BgPower/BtnBuy").GetComponent<Button>();
         btnVip = transform.Find("RightTopPanel/BtnVip").GetComponent<Button>();
@@ -143,12 +148,14 @@ public class MainWnd : WindowRoot
             SetText(txtPower, string.Format(Language.GetString(5), data.Power, PECommonTool.GetPowerLimit(data.Level)));
             SetText(txtLevel, data.Level);
             SetExp(data);
+            curGuideData = mResSvc.GetGuideData(data.GuideID);
         }
 
         useDoTween = true;
-        OnBtnCtrlState();
-
+        OnBtnCtrlState(); 
         SetActive(rockingBarPointTr, false);
+         
+        UpateGuideData();
     }
      
     /// <summary>
@@ -162,11 +169,19 @@ public class MainWnd : WindowRoot
         imgExpFill.fillAmount = percent;
     }
 
+    private void OnBtnHead() {  
+        mGameRoot.mActorInfoWnd.SetWndState();
+        MainCitySys.Instance.SetPlayerCam();
+    }
+
     private void OnBtnUpfight() { }
     private void OnBtnBuy() { }
     private void OnBtnVip() { }
     private void OnBtnCharge() { }
-    private void OnBtnAutoTask() { }
+    private void OnBtnAutoTask() {
+        //引导任务按钮
+        MainCitySys.Instance.ExecuteGuideTask(curGuideData);
+    }
     private void OnBtnFuBen() { }
     private void OnBtnTask() { }
     private void OnBtnCast() { }
@@ -203,6 +218,43 @@ public class MainWnd : WindowRoot
     private void OnBtnChat() { }
      
      
+
+
+     
+
+
+    private void UpateGuideData()
+    {
+        if (curGuideData == null) {
+            return;
+        }
+
+        int npcId = curGuideData.npcID;
+        Image img = btnAudoTask.GetComponent<Image>();
+        string sptPath = "";
+        switch (npcId)
+        {
+            case (int)GuideNpcIDType.NpcWiseman:
+                sptPath = PathDefine.WisemanIcon;
+                break;
+            case (int)GuideNpcIDType.NpcGeneral:
+                sptPath = PathDefine.GeneralIcon;
+                break;
+            case (int)GuideNpcIDType.NpcArtisan:
+                sptPath = PathDefine.ArtisanIcon;
+                break;
+            case (int)GuideNpcIDType.NpcTrader:
+                sptPath = PathDefine.TraderIcon;
+                break;
+        }
+        SetSprite(img, sptPath);
+    }
+
+
+
+
+
+
     /// <summary>
     /// 摇杆事件注册
     /// </summary>
@@ -233,7 +285,9 @@ public class MainWnd : WindowRoot
             }
             else {
                 rockingBarPointTr.anchoredPosition = dir;
-            } 
+            }
+
+            MainCitySys.Instance.SetPlayerMove(dir);
         });
 
         RegisterPointerUpCB(rockingBarAreaTr.gameObject, (PointerEventData evtData) =>
@@ -241,16 +295,14 @@ public class MainWnd : WindowRoot
             rockingBarBgTr.anchoredPosition = originPos_rbBg;
             SetActive(rockingBarPointTr, false);
             rockingBarPointTr.anchoredPosition = Vector2.zero;
+
+            MainCitySys.Instance.SetPlayerMove(Vector3.zero);
         });
     }
 
-
-     
-
-
-
     private void AddClickListener()
     {
+        btnHead.onClick.AddListener(OnBtnHead);
         btnUpfight.onClick.AddListener(OnBtnUpfight);
         btnBuy.onClick.AddListener(OnBtnBuy);
         btnVip.onClick.AddListener(OnBtnVip);
