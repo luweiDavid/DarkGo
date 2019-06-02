@@ -11,17 +11,13 @@ using PENet;
 using Protocol;
 using System.Collections.Generic;
 
-public class NetSvc : MonoBehaviour 
+public class NetSvc : ServiceRoot<NetSvc>
 {
-    private const string obj = "lock";
-
-    public static NetSvc Instance;
+    private const string obj = "lock"; 
 
     PESocket<ClientSession, NetMsg> socket = null;
     private Queue<NetMsg> msgQueue = new Queue<NetMsg>();
-
-
-
+     
 
     private void Start()
     {
@@ -29,13 +25,7 @@ public class NetSvc : MonoBehaviour
         socket.StartAsClient(ServerCfg.IP, ServerCfg.Port);
 
         SetLog();
-    }
-
-    public void Init()
-    {
-        Instance = this;
-        Debug.Log("NetSvc Init Done");
-    }
+    } 
 
     public void SendMsg(NetMsg msg) {
         if (socket.session != null)
@@ -79,7 +69,10 @@ public class NetSvc : MonoBehaviour
                 LoginSys.Instance.RspRename(msg);
                 break;
             case MsgType.RspGuide:
-                MainCitySys.Instance.RspGuide(msg);
+                MainCitySys.Instance.RspGuide(msg); 
+                break;
+            case MsgType.RspStrong:
+                MainCitySys.Instance.RspStrong(msg);
                 break;
         }
     }
@@ -105,6 +98,15 @@ public class NetSvc : MonoBehaviour
             case ErrorCode.ServerDataError:
                 PECommonTool.Log("数据库更新失败");
                 GameRoot.Instance.AddTips(Language.GetString(8));
+                break;
+            case ErrorCode.LackCoin:
+                GameRoot.Instance.AddTips(Language.GetString(62));
+                break;
+            case ErrorCode.LackCrystal:
+                GameRoot.Instance.AddTips(Language.GetString(61));
+                break;
+            case ErrorCode.LackLevel:
+                GameRoot.Instance.AddTips(Language.GetString(60));
                 break;
         }
     }

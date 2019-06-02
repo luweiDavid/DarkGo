@@ -8,14 +8,8 @@
 
 using UnityEngine;
 
-public class AudioSvc : MonoBehaviour 
-{
-    public static AudioSvc Instance;
-
-    public void Init() {
-        Instance = this;
-    }
-
+public class AudioSvc : ServiceRoot<AudioSvc>
+{ 
     public AudioSource bgAudioSrc;
     public AudioSource uiAudioSrc;
 

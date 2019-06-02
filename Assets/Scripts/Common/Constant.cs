@@ -45,9 +45,3 @@ public class Constant
 }
 
 
-public enum GuideNpcIDType {
-    NpcWiseman = 0,
-    NpcGeneral,
-    NpcArtisan,
-    NpcTrader,
-}

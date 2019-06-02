@@ -12,13 +12,17 @@ public class PathDefine
     public const string RdName = "Configs/rdname";
     public const string Map_V1 = "Configs/map_v1";
     public const string Guide = "Configs/guide";
- 
+    public const string Strong = "Configs/strong"; 
+
+    #endregion
+
+
+
     //prefab路径
     public const string PlayerAssassin = "PrefabPlayer/Assassin";
     public const string PlayerAssassinCity = "PrefabPlayer/AssassinCity";
 
-
-
+     
     //图片路径
     public const string TaskIcon = "Textures/task";
     public const string ArtisanIcon = "Textures/artisan";
@@ -34,5 +38,13 @@ public class PathDefine
     public const string DefaultGuideRoleImg = "Textures/npcguide";
 
 
-    #endregion
+    public const string TouKuiIcon = "Textures/toukui";
+    public const string BodyIcon = "Textures/body";
+    public const string YaoBuIcon = "Textures/yaobu";
+    public const string HandIcon = "Textures/hand";
+    public const string LegIcon = "Textures/leg";
+    public const string FootIcon = "Textures/foot";
+
+
+   
 }

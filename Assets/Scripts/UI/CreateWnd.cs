@@ -34,7 +34,7 @@ public class CreateWnd : WindowRoot
     private void OnRandNameBtnClick() {
         mAudioSvc.PlayUIAudio(Constant.Audio_BtnClick);
 
-        string name = mResSvc.GetRandName();
+        string name = mCfgSvc.GetRandName();
         IptName.text = name; 
     }
     private void OnEnterBtnClick() {

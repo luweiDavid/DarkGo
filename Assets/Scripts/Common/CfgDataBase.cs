@@ -13,6 +13,19 @@ public class BaseCfgData<T>
     public int ID;
 }
 
+public class CfgStrongData : BaseCfgData<CfgStrongData>
+{
+    public int pos;
+    public int starLv;
+    public int addHp;
+    public int addHurt;
+    public int addDef;
+    public int minLv;
+    public int coin;
+    public int crystal;
+
+}
+
 public class CfgMapData : BaseCfgData<CfgMapData> {
 
     public string mapName;

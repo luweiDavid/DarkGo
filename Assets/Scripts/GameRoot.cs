@@ -14,6 +14,7 @@ public class GameRoot : MonoBehaviour
     public static GameRoot Instance;
 
     //服务层
+    private CfgSvc mCfgSvc;
     private ResSvc mResSvc;
     private AudioSvc mAudioSvc;
     private NetSvc mNetSvc;
@@ -39,6 +40,9 @@ public class GameRoot : MonoBehaviour
     public ActorInfoWnd mActorInfoWnd;
     [HideInInspector]
     public GuideWnd mGuideWnd;
+    [HideInInspector]
+    public StrongWnd mStrongWnd;
+
 
     //数据层
     private PlayerData mPlayerData;
@@ -60,9 +64,14 @@ public class GameRoot : MonoBehaviour
         mMainWnd = transform.Find("UIRoot/MainWnd").GetComponent<MainWnd>();
         mActorInfoWnd = transform.Find("UIRoot/ActorInfoWnd").GetComponent<ActorInfoWnd>();
         mGuideWnd = transform.Find("UIRoot/GuideWnd").GetComponent<GuideWnd>();
+        mStrongWnd = transform.Find("UIRoot/StrongWnd").GetComponent<StrongWnd>();
+        
+
         #endregion
 
         #region  服务层初始化
+        mCfgSvc = GetComponent<CfgSvc>();
+        mCfgSvc.Init();
         mResSvc = GetComponent<ResSvc>();
         mResSvc.Init(); 
         mAudioSvc = GetComponent<AudioSvc>();

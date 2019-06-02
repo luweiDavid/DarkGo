@@ -32,7 +32,7 @@ public class MainCitySys : SystemRoot
     }
 
     public void EnterMainCity() {
-        CfgMapData mapData = mResSvc.GetMapData(Constant.Scene_MainCityID);
+        CfgMapData mapData = mCfgSvc.GetMapData(Constant.Scene_MainCityID);
         mResSvc.AsyncLoadScene(Constant.Scene_MainCity, () =>
         {
             //加载角色
@@ -211,6 +211,10 @@ public class MainCitySys : SystemRoot
         mGameRoot.mMainWnd.UpdateData(data);
     }
 
+    public void UpdateStrongWnd(PlayerData data) {
+        mGameRoot.mStrongWnd.UpdateData(data);
+    }
+
     #endregion
 
 
@@ -247,7 +251,35 @@ public class MainCitySys : SystemRoot
         ExecuteGuideTask();
     }
 
-    
+
+    public void ReqStrong(int _pos)
+    {
+        NetMsg newMsg = new NetMsg
+        {
+            cmd = (int)MsgType.ReqStrong,
+        };
+        newMsg.ReqStrong = new ReqStrong
+        {
+            pos = _pos,
+        };
+
+        mNetSvc.SendMsg(newMsg);
+        Debug.Log("ReqStrong");
+    }
+
+    public void RspStrong(NetMsg msg)
+    {
+        int preFight = PECommonTool.GetFight(mGameRoot.GetPlayerData()); 
+        RspStrong rspData = msg.RspStrong; 
+        mGameRoot.SetPlayerData(rspData.data);
+        int nextFight = PECommonTool.GetFight(rspData.data);
+
+        //更新强化面板
+        UpdateStrongWnd(rspData.data);
+
+        mGameRoot.AddTips("<color=#FF0000>升星成功</color>, 战力提升：" + (nextFight - preFight));
+    }
+
     #endregion
 
 

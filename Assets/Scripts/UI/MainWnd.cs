@@ -165,7 +165,7 @@ public class MainWnd : WindowRoot
             imgExpFill.fillAmount = percent;
 
             //更新引导数据
-            curGuideData = mResSvc.GetGuideData(data.GuideID); 
+            curGuideData = mCfgSvc.GetGuideData(data.GuideID); 
             UpateGuideData();
         }
     }
@@ -221,7 +221,11 @@ public class MainWnd : WindowRoot
     private void OnBtnFuBen() { }
     private void OnBtnTask() { }
     private void OnBtnCast() { }
-    private void OnBtnStrengthen() { }
+    private void OnBtnStrengthen() {
+        //强化系统
+        mGameRoot.mStrongWnd.SetWndState();
+
+    }
     private void OnBtnCtrlState() {
         //用两种方式播放动画，1：DOTween， 2，Animation
         //用DOTween的话就比较灵活，后续加入新的item也不用修改代码

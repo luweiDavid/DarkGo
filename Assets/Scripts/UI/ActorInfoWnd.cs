@@ -15,8 +15,7 @@ public class ActorInfoWnd : WindowRoot
 {
 
     private Button btnClose;
-    private Button btnDetail;
-    
+    private Button btnDetail; 
 
     private Transform charShowTr;
     private Image expFillImg;

@@ -15,6 +15,7 @@ using UnityEngine.UI;
 public class WindowRoot : MonoBehaviour
 {
     protected GameRoot mGameRoot;
+    protected CfgSvc mCfgSvc;
     protected ResSvc mResSvc;
     protected AudioSvc mAudioSvc;
     protected NetSvc mNetSvc;
@@ -34,6 +35,7 @@ public class WindowRoot : MonoBehaviour
 
     protected virtual void InitWnd() {
         mGameRoot = GameRoot.Instance;
+        mCfgSvc = CfgSvc.Instance;
         mResSvc = ResSvc.Instance;
         mAudioSvc = AudioSvc.Instance;
         mNetSvc = NetSvc.Instance;
@@ -44,6 +46,7 @@ public class WindowRoot : MonoBehaviour
         mResSvc = null;
         mAudioSvc = null;
         mNetSvc = null;
+        mCfgSvc = null;
     }
 
     #region 点击拖拽事件

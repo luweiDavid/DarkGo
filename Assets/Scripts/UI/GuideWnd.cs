@@ -39,7 +39,7 @@ public class GuideWnd : WindowRoot
         base.InitWnd();
         playerData = mGameRoot.GetPlayerData();
         if (playerData != null) {
-            curGuideData = mResSvc.GetGuideData(playerData.GuideID); 
+            curGuideData = mCfgSvc.GetGuideData(playerData.GuideID); 
         }
         
         UpdateData();

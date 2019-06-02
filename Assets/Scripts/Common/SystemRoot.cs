@@ -11,12 +11,15 @@ using UnityEngine;
 public class SystemRoot : MonoBehaviour 
 {
     protected GameRoot mGameRoot;
+    protected CfgSvc mCfgSvc;
     protected ResSvc mResSvc;
     protected AudioSvc mAudioSvc;
     protected NetSvc mNetSvc;
 
+
     public virtual void Init() {
         mGameRoot = GameRoot.Instance;
+        mCfgSvc = CfgSvc.Instance;
         mResSvc = ResSvc.Instance;
         mAudioSvc = AudioSvc.Instance;
         mNetSvc = NetSvc.Instance;
