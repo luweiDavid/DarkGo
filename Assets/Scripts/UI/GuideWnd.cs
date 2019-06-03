@@ -34,9 +34,9 @@ public class GuideWnd : WindowRoot
         AddClickListener();
     } 
 
-    protected override void InitWnd()
+    protected override void InitWnd(object[] args = null)
     {
-        base.InitWnd();
+        base.InitWnd(args);
         playerData = mGameRoot.GetPlayerData();
         if (playerData != null) {
             curGuideData = mCfgSvc.GetGuideData(playerData.GuideID); 

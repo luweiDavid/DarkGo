@@ -25,9 +25,9 @@ public class CreateWnd : WindowRoot
         btnEnter.onClick.AddListener(OnEnterBtnClick);
     }
 
-    protected override void InitWnd()
+    protected override void InitWnd(object[] args = null)
     {
-        base.InitWnd();
+        base.InitWnd(args);
 
     }
 

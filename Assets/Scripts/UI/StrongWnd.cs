@@ -30,9 +30,8 @@ public class StrongWnd : WindowRoot
     private Text txtConsumeCrystal;
     private Transform fullToHideTr;
     private Text txtTotalCoin;  
-    public Toggle[] toggleArray;
-    private int curToggleIndex;
-
+    private Toggle[] toggleArray;
+    private int curToggleIndex; 
 
     private PlayerData playerData;
     private CfgStrongData nextStrongCfg;
@@ -62,6 +61,12 @@ public class StrongWnd : WindowRoot
         txtTotalCoin = transform.Find("RightPanel/Bottom/Bg/TotalCoin").GetComponent<Text>();
 
         AddClickListener();
+
+        toggleArray = new Toggle[6];
+        for (int i = 0; i < toggleArray.Length; i++)
+        {
+            toggleArray[i] = transform.Find("LeftPanel/ToggleContainer/Toggle" + i.ToString()).GetComponent<Toggle>();
+        }
         for (int i = 0; i < toggleArray.Length; i++)
         { 
             toggleArray[i].OnValueChgedExt(OnToggleValueChged);
@@ -88,7 +93,7 @@ public class StrongWnd : WindowRoot
         UpdateData(playerData);
     }
 
-    protected override void InitWnd()
+    protected override void InitWnd(object[] args = null)
     {
         base.InitWnd();
 

@@ -26,9 +26,9 @@ public class LoadingWnd : WindowRoot
         fillWidth = imgFill.GetComponent<RectTransform>().sizeDelta.x;
     }
 
-    protected override void InitWnd()
+    protected override void InitWnd(object[] args = null)
     {
-        base.InitWnd();
+        base.InitWnd(args);
         SetText(txtTips, "这是一条游戏tips");
         imgFill.fillAmount = 0;
         imgPoint.transform.localPosition = new Vector2(-fillWidth / 2, 0);  

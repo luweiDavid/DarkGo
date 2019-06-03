@@ -97,7 +97,7 @@ public class MainWnd : WindowRoot
         btnCast = transform.Find("RightBottomPanel/ImgLeftMask/BtnCast").GetComponent<Button>();
         btnStrengthen = transform.Find("RightBottomPanel/ImgLeftMask/BtnStrengthen").GetComponent<Button>();
         btnCtrlState = transform.Find("RightBottomPanel/BtnCtrlState").GetComponent<Button>();
-        btnChat = transform.Find("MiddleBottomPanel/BgChat/BtnChat").GetComponent<Button>(); 
+        btnChat = transform.Find("MiddleBottomPanel/BtnChat").GetComponent<Button>(); 
         imgExpFill = transform.Find("MiddleBottomPanel/ImgFill").GetComponent<Image>();
         dotGridLayoutGroup = transform.Find("MiddleBottomPanel/ImgFill/DotContainer").GetComponent<GridLayoutGroup>();
 
@@ -140,9 +140,9 @@ public class MainWnd : WindowRoot
         dotGridLayoutGroup.spacing = new Vector2(xSpacing, 0);
     }
 
-    protected override void InitWnd()
+    protected override void InitWnd(object[] args = null)
     {
-        base.InitWnd();
+        base.InitWnd(args);
 
         PlayerData data = mGameRoot.GetPlayerData();
         UpdateData(data);
@@ -211,7 +211,14 @@ public class MainWnd : WindowRoot
     }
 
     private void OnBtnUpfight() { }
-    private void OnBtnBuy() { }
+
+
+    private void OnBtnBuy() {
+        //购买体力
+        mGameRoot.mCommonBuyWnd.SetWndState(true, new object[1] { CommonBuyType.Power });
+    }
+
+
     private void OnBtnVip() { }
     private void OnBtnCharge() { }
     private void OnBtnAutoTask() {
@@ -220,7 +227,16 @@ public class MainWnd : WindowRoot
     }
     private void OnBtnFuBen() { }
     private void OnBtnTask() { }
-    private void OnBtnCast() { }
+
+
+
+    private void OnBtnCast() {
+        //铸造
+        mGameRoot.mCommonBuyWnd.SetWndState(true, new object[1] { CommonBuyType.Coin });
+    }
+
+
+
     private void OnBtnStrengthen() {
         //强化系统
         mGameRoot.mStrongWnd.SetWndState();
@@ -255,12 +271,12 @@ public class MainWnd : WindowRoot
             }
         } 
     }
-    private void OnBtnChat() { }
+    private void OnBtnChat() {
+        mGameRoot.mChatWnd.SetWndState();
+
+    }
      
-      
-
-
-
+       
     /// <summary>
     /// 摇杆事件注册
     /// </summary>

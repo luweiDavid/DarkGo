@@ -20,20 +20,20 @@ public class WindowRoot : MonoBehaviour
     protected AudioSvc mAudioSvc;
     protected NetSvc mNetSvc;
     
-    public void SetWndState(bool isActive = true) {
+    public void SetWndState(bool isActive = true, object[] args = null) {
         if (gameObject.activeSelf != isActive) {
             SetActive(gameObject, isActive);
         }
         if (isActive)
         {
-            InitWnd();
+            InitWnd(args);
         }
         else {
             CloseWnd();
         }
     }
 
-    protected virtual void InitWnd() {
+    protected virtual void InitWnd(object[] args = null) {
         mGameRoot = GameRoot.Instance;
         mCfgSvc = CfgSvc.Instance;
         mResSvc = ResSvc.Instance;
@@ -47,6 +47,10 @@ public class WindowRoot : MonoBehaviour
         mAudioSvc = null;
         mNetSvc = null;
         mCfgSvc = null;
+    }
+
+    protected bool IsOpen() {
+        return gameObject.activeSelf;
     }
 
     #region 点击拖拽事件

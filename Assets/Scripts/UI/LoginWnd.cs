@@ -28,9 +28,9 @@ public class LoginWnd : WindowRoot
         btnEnter.onClick.AddListener(OnEnterBtnClick);
     }
 
-    protected override void InitWnd()
+    protected override void InitWnd(object[] args = null)
     {
-        base.InitWnd();
+        base.InitWnd(args);
 
         if (PlayerPrefs.HasKey("Account") && PlayerPrefs.HasKey("Password"))
         {

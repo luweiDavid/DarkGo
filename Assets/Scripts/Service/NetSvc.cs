@@ -74,6 +74,12 @@ public class NetSvc : ServiceRoot<NetSvc>
             case MsgType.RspStrong:
                 MainCitySys.Instance.RspStrong(msg);
                 break;
+            case MsgType.PushChatMsg: 
+                MainCitySys.Instance.PushChatMsg(msg);
+                break; 
+            case MsgType.RspBuy:
+                MainCitySys.Instance.RspBuy(msg);
+                break;
         }
     }
 

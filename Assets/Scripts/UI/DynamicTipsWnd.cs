@@ -26,9 +26,9 @@ public class DynamicTipsWnd : WindowRoot
         txtTips = transform.Find("Panel/TxtTips").GetComponent<Text>();
     }
 
-    protected override void InitWnd()
+    protected override void InitWnd(object[] args = null)
     {
-        base.InitWnd();
+        base.InitWnd(args);
         isShowing = false;
         SetActive(txtTips, false);
     }

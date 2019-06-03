@@ -78,7 +78,7 @@ public class ActorInfoWnd : WindowRoot
         AddClickListener();
     } 
 
-    protected override void InitWnd()
+    protected override void InitWnd(object[] args = null)
     {
         base.InitWnd();
 

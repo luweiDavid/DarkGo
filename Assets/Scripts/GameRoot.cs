@@ -9,7 +9,7 @@
 using Protocol;
 using UnityEngine;
 
-public class GameRoot : MonoBehaviour 
+public class GameRoot : MonoBehaviour
 {
     public static GameRoot Instance;
 
@@ -22,7 +22,7 @@ public class GameRoot : MonoBehaviour
     //业务层
     private LoginSys mLoginSys;
     private MainCitySys mMainCitySys;
-     
+
     //UI层
     [HideInInspector]
     public Transform mUIRootTr;
@@ -42,7 +42,11 @@ public class GameRoot : MonoBehaviour
     public GuideWnd mGuideWnd;
     [HideInInspector]
     public StrongWnd mStrongWnd;
+    [HideInInspector]
+    public ChatWnd mChatWnd;
 
+    [HideInInspector]
+    public CommonBuyWnd mCommonBuyWnd;
 
     //数据层
     private PlayerData mPlayerData;
@@ -65,6 +69,8 @@ public class GameRoot : MonoBehaviour
         mActorInfoWnd = transform.Find("UIRoot/ActorInfoWnd").GetComponent<ActorInfoWnd>();
         mGuideWnd = transform.Find("UIRoot/GuideWnd").GetComponent<GuideWnd>();
         mStrongWnd = transform.Find("UIRoot/StrongWnd").GetComponent<StrongWnd>();
+        mChatWnd = transform.Find("UIRoot/ChatWnd").GetComponent<ChatWnd>();
+        mCommonBuyWnd = transform.Find("UIRoot/CommonBuyWnd").GetComponent<CommonBuyWnd>();
         
 
         #endregion

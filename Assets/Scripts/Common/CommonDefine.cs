@@ -23,4 +23,4 @@ public enum PropertyType {
     Hp,
     Hurt,
     Def,
-}
+} 

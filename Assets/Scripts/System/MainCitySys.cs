@@ -215,6 +215,10 @@ public class MainCitySys : SystemRoot
         mGameRoot.mStrongWnd.UpdateData(data);
     }
 
+    public void AddChatMsg(string str) {
+        mGameRoot.mChatWnd.AddChatMsg(str);
+    }
+
     #endregion
 
 
@@ -278,6 +282,60 @@ public class MainCitySys : SystemRoot
         UpdateStrongWnd(rspData.data);
 
         mGameRoot.AddTips("<color=#FF0000>升星成功</color>, 战力提升：" + (nextFight - preFight));
+    }
+
+    public void SendChatMsg(string _str)
+    {
+        NetMsg newMsg = new NetMsg
+        {
+            cmd = (int)MsgType.SendChatMsg,
+        };
+        newMsg.SendChatMsg = new SendChatMsg
+        {
+            str = _str,
+        };
+
+        mNetSvc.SendMsg(newMsg);
+        Debug.Log("SendChatMsg  : " + _str);
+    }
+
+    public void PushChatMsg(NetMsg msg) {
+        PushChatMsg rspData = msg.PushChatMsg;
+
+       string chatStr = string.Format(Language.GetString(120), rspData.name, rspData.str);
+
+        AddChatMsg(chatStr);
+    }
+     
+
+    public void ReqBuy(int _buyType)
+    {
+        NetMsg newMsg = new NetMsg
+        {
+            cmd = (int)MsgType.ReqBuy,
+            ReqBuy = new ReqBuy
+            {
+                buyType = _buyType,
+            },
+        };
+
+        mNetSvc.SendMsg(newMsg);
+        Debug.Log("ReqBuy");
+    }
+
+    public void RspBuy(NetMsg msg) {
+        RspBuy rspData = msg.RspBuy;
+        mGameRoot.SetPlayerData(rspData.data);
+
+        switch (rspData.buyType)
+        {
+            case (int)CommonBuyType.Coin:
+                mGameRoot.AddTips(Language.GetString(50));
+                break;
+            case (int)CommonBuyType.Power:
+                mGameRoot.AddTips(Language.GetString(49));
+                break;
+        }
     }
 
     #endregion
