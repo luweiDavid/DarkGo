@@ -18,6 +18,7 @@ public class GameRoot : MonoBehaviour
     private ResSvc mResSvc;
     private AudioSvc mAudioSvc;
     private NetSvc mNetSvc;
+    private TimerSvc mTimerSvc;
 
     //业务层
     private LoginSys mLoginSys;
@@ -43,8 +44,7 @@ public class GameRoot : MonoBehaviour
     [HideInInspector]
     public StrongWnd mStrongWnd;
     [HideInInspector]
-    public ChatWnd mChatWnd;
-
+    public ChatWnd mChatWnd; 
     [HideInInspector]
     public CommonBuyWnd mCommonBuyWnd;
 
@@ -84,6 +84,8 @@ public class GameRoot : MonoBehaviour
         mAudioSvc.Init();
         mNetSvc = GetComponent<NetSvc>();
         mNetSvc.Init();
+        mTimerSvc = GetComponent<TimerSvc>();
+        mTimerSvc.Init();
         #endregion
 
         #region  业务层初始化

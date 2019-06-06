@@ -1,7 +1,12 @@
+/****************************************************
+	文件：CommonBuyWnd.cs
+	作者：David
+	邮箱: 1785275942@qq.com
+	日期：2019/06/06 14:28   	
+	功能：公共的购买窗口
+*****************************************************/
+
 using Protocol;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class CommonBuyWnd : WindowRoot
@@ -42,13 +47,11 @@ public class CommonBuyWnd : WindowRoot
         switch (buyType)
         {
             case (int)CommonBuyType.Coin:
-                //购买金币
                 titleStr = string.Format(Language.GetString(48));
                 //10颗钻石购买100个金币
                 contentStr = string.Format(Language.GetString(45), 10, 100);
                 break;
             case (int)CommonBuyType.Power:
-                //购买体力 
                 titleStr = string.Format(Language.GetString(47));
                 //10颗钻石购买50点体力
                 contentStr = string.Format(Language.GetString(46), 10, 50);

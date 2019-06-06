@@ -80,6 +80,9 @@ public class NetSvc : ServiceRoot<NetSvc>
             case MsgType.RspBuy:
                 MainCitySys.Instance.RspBuy(msg);
                 break;
+            case MsgType.NtfPowerChg:
+                MainCitySys.Instance.NtfPowerChg(msg);
+                break;
         }
     }
 
@@ -113,7 +116,7 @@ public class NetSvc : ServiceRoot<NetSvc>
                 break;
             case ErrorCode.LackLevel:
                 GameRoot.Instance.AddTips(Language.GetString(60));
-                break;
+                break; 
         }
     }
 

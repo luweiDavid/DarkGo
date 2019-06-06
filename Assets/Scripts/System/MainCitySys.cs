@@ -338,6 +338,15 @@ public class MainCitySys : SystemRoot
         }
     }
 
+    public void NtfPowerChg(NetMsg msg) {
+        NtfPowerChg rspData = msg.NtfPowerChg;
+        PlayerData pre = mGameRoot.GetPlayerData(); 
+
+        mGameRoot.SetPlayerData(rspData.data);
+
+        mGameRoot.AddTips("增加体力： " + (rspData.data.Power - pre.Power));
+    }
+
     #endregion
 
 
