@@ -13,7 +13,7 @@ public class AudioSvc : ServiceRoot<AudioSvc>
     public AudioSource bgAudioSrc;
     public AudioSource uiAudioSrc;
 
-    public void PlayBgAudio(string name, bool isLoop) {
+    public void PlayBgAudio(string name, bool isLoop = true) {
         if (bgAudioSrc != null) {
             if (bgAudioSrc.clip == null || bgAudioSrc.clip.name != name) {
                 bgAudioSrc.clip = ResSvc.Instance.GetAudio("Audio/" + name, true);

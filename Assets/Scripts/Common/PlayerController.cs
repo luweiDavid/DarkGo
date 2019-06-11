@@ -38,6 +38,11 @@ public class PlayerController : MonoBehaviour
     private float curBlend;
     private float targetBlend;
 
+    //private void Awake()
+    //{
+    //    Init();
+    //}
+
     public void Init()
     {
         anim = GetComponent<Animator>();
@@ -50,6 +55,10 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
+        //float x = Input.GetAxis("Horizontal");
+        //float y = Input.GetAxis("Vertical");
+        //MoveDir = new Vector3(x, y, 0);
+
         if (moveDir != Vector3.zero)
         {
             //开始移动
@@ -66,8 +75,7 @@ public class PlayerController : MonoBehaviour
             OnMove();
         } 
         if (curBlend != targetBlend)
-        {
-           
+        { 
             UpdateMoveAction();
         }
     }
@@ -78,7 +86,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnMove() {
         //调整方向
-        float angle = Vector2.SignedAngle(moveDir, new Vector2(0, 1)) + mainCamTr.eulerAngles.y;
+        float angle = Vector2.SignedAngle(moveDir, new Vector2(0, 1));//+ mainCamTr.eulerAngles.y;
         transform.localEulerAngles = new Vector3(0, angle, 0);
 
         charCtrl.Move(Time.deltaTime * Constant.PlayerMoveSpeed * transform.forward);

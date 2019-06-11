@@ -19,7 +19,7 @@ public class GuideWnd : WindowRoot
     private Text txtDes;
     private Button btnNext;
 
-    private CfgGuideData curGuideData;
+    private CfgGuide curGuideData;
     private PlayerData playerData;
     private string[] dialogArr;
     private int index;
@@ -39,7 +39,7 @@ public class GuideWnd : WindowRoot
         base.InitWnd(args);
         playerData = mGameRoot.GetPlayerData();
         if (playerData != null) {
-            curGuideData = mCfgSvc.GetGuideData(playerData.GuideID); 
+            curGuideData = mCfgSvc.GetCfgGuide(playerData.GuideID); 
         }
         
         UpdateData();

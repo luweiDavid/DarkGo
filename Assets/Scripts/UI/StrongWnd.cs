@@ -34,7 +34,7 @@ public class StrongWnd : WindowRoot
     private int curToggleIndex; 
 
     private PlayerData playerData;
-    private CfgStrongData nextStrongCfg;
+    private CfgStrong nextStrongCfg;
 
     private void Awake()
     {
@@ -111,7 +111,7 @@ public class StrongWnd : WindowRoot
         }
         string iconPath = "";
         int curStar = data.Strong[curToggleIndex];
-        CfgStrongData cfg = mCfgSvc.GetStrongData(curToggleIndex, curStar);
+        CfgStrong cfg = mCfgSvc.GetCfgStrong(curToggleIndex, curStar);
         if (cfg == null) {
             Debug.LogError("获取强化数据配置错误");
             return;
@@ -122,7 +122,7 @@ public class StrongWnd : WindowRoot
 
 
         //下一个星级配置数据
-        nextStrongCfg = mCfgSvc.GetStrongData(curToggleIndex, curStar + 1);
+        nextStrongCfg = mCfgSvc.GetCfgStrong(curToggleIndex, curStar + 1);
         int addHpAfter = 0;
         int addHurtAfter = 0;
         int addDefAfter = 0;

@@ -83,6 +83,9 @@ public class NetSvc : ServiceRoot<NetSvc>
             case MsgType.NtfPowerChg:
                 MainCitySys.Instance.NtfPowerChg(msg);
                 break;
+            case MsgType.RspFuBen:
+                FuBenSys.Instance.RspFuBen(msg);
+                break;
         }
     }
 
@@ -116,7 +119,13 @@ public class NetSvc : ServiceRoot<NetSvc>
                 break;
             case ErrorCode.LackLevel:
                 GameRoot.Instance.AddTips(Language.GetString(60));
-                break; 
+                break;
+            case ErrorCode.LackPower:
+                GameRoot.Instance.AddTips(Language.GetString(58));
+                break;
+            case ErrorCode.ClientDataError:
+                GameRoot.Instance.AddTips(Language.GetString(8));
+                break;
         }
     }
 

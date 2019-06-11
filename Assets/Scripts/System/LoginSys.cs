@@ -9,16 +9,8 @@
 using Protocol;
 using UnityEngine;
 
-public class LoginSys : SystemRoot 
-{
-    public static LoginSys Instance;
-
-
-    public override void Init() {
-        base.Init();
-
-        Instance = this; 
-    }
+public class LoginSys : SystemRoot<LoginSys>
+{ 
     public void EnterLogin() {
 
         mResSvc.AsyncLoadScene(Constant.Scene_Login, () =>

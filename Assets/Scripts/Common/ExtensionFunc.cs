@@ -11,18 +11,30 @@ using UnityEngine.Events;
 using UnityEngine.UI;  
 
 public static class ExtensionFunc 
-{
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="toggle"></param>
-    /// <param name="cb2"></param>
+{ 
     public static void OnValueChgedExt(this Toggle toggle, UnityAction<string> cb2) {
         toggle.onValueChanged.AddListener((bool b)=> { 
             if (b) {
                 cb2(toggle.name);
             } 
+        });
+    }
+
+
+    public static void OnClickExt(this Button btn,UnityAction cb1, UnityAction<string> cb2) {
+        btn.onClick.AddListener(() =>
+        {
+            cb1();
+            cb2(btn.name);
+        });
+    }
+
+
+    public static void OnClickExt(this Button btn, UnityAction<string> cb2)
+    {
+        btn.onClick.AddListener(() =>
+        { 
+            cb2(btn.name);
         });
     }
 }

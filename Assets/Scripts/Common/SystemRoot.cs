@@ -8,8 +8,10 @@
 
 using UnityEngine;
 
-public class SystemRoot : MonoBehaviour 
+public class SystemRoot<T> : MonoBehaviour where T:MonoBehaviour
 {
+    public static T Instance;
+
     protected GameRoot mGameRoot;
     protected CfgSvc mCfgSvc;
     protected ResSvc mResSvc;
@@ -18,6 +20,8 @@ public class SystemRoot : MonoBehaviour
 
 
     public virtual void Init() {
+        Instance = this as T;
+
         mGameRoot = GameRoot.Instance;
         mCfgSvc = CfgSvc.Instance;
         mResSvc = ResSvc.Instance;

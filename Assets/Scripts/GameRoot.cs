@@ -23,8 +23,11 @@ public class GameRoot : MonoBehaviour
     //业务层
     private LoginSys mLoginSys;
     private MainCitySys mMainCitySys;
+    private FuBenSys mFuBenSys;
+    private BattleSys mBattleSys;
 
-    //UI层
+
+    #region    //UI层
     [HideInInspector]
     public Transform mUIRootTr;
     [HideInInspector]
@@ -47,6 +50,9 @@ public class GameRoot : MonoBehaviour
     public ChatWnd mChatWnd; 
     [HideInInspector]
     public CommonBuyWnd mCommonBuyWnd;
+    [HideInInspector]
+    public FuBenWnd mFuBenWnd;
+    #endregion
 
     //数据层
     private PlayerData mPlayerData;
@@ -71,8 +77,8 @@ public class GameRoot : MonoBehaviour
         mStrongWnd = transform.Find("UIRoot/StrongWnd").GetComponent<StrongWnd>();
         mChatWnd = transform.Find("UIRoot/ChatWnd").GetComponent<ChatWnd>();
         mCommonBuyWnd = transform.Find("UIRoot/CommonBuyWnd").GetComponent<CommonBuyWnd>();
-        
-
+        mFuBenWnd = transform.Find("UIRoot/FuBenWnd").GetComponent<FuBenWnd>();
+         
         #endregion
 
         #region  服务层初始化
@@ -93,7 +99,10 @@ public class GameRoot : MonoBehaviour
         mLoginSys.Init();
         mMainCitySys = GetComponent<MainCitySys>();
         mMainCitySys.Init();
-
+        mFuBenSys = GetComponent<FuBenSys>();
+        mFuBenSys.Init();
+        mBattleSys = GetComponent<BattleSys>();
+        mBattleSys.Init();
         #endregion
 
         InitUIRoot(); 

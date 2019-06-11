@@ -10,29 +10,20 @@ using Protocol;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MainCitySys : SystemRoot
-{
-    public static MainCitySys Instance;
-
+public class MainCitySys : SystemRoot<MainCitySys> {
     public PlayerController playerCtrl;
     private Transform playerCamTr;
 
     #region 引导相关属性
-    private CfgGuideData curGuideData;
+    private CfgGuide curGuideData;
     private NavMeshAgent navAgent; 
     private Transform[] npcPosTrArray;
     private bool isNavigation = false;
     #endregion
-
-    public override void Init()
-    {
-        base.Init();
-
-        Instance = this;
-    }
+     
 
     public void EnterMainCity() {
-        CfgMapData mapData = mCfgSvc.GetMapData(Constant.Scene_MainCityID);
+        CfgMap mapData = mCfgSvc.GetCfgMap(Constant.Scene_MainCityID);
         mResSvc.AsyncLoadScene(Constant.Scene_MainCity, () =>
         {
             //加载角色
@@ -53,19 +44,19 @@ public class MainCitySys : SystemRoot
 
 
     
-    private void LoadPlayer(CfgMapData data)
+    private void LoadPlayer(CfgMap cfg)
     {
-        if (data == null) {
+        if (cfg == null) {
             Debug.LogError("地图配置信息为空");
             return;
         } 
         GameObject cityPlayerGo = mResSvc.GetInstantiateGo(PathDefine.PlayerAssassinCity);
         if (cityPlayerGo != null) { 
-            cityPlayerGo.transform.position = data.playerBornPos;
-            cityPlayerGo.transform.localEulerAngles = data.playerBornRote;
+            cityPlayerGo.transform.position = cfg.playerBornPos;
+            cityPlayerGo.transform.localEulerAngles = cfg.playerBornRote;
 
-            Camera.main.transform.position = data.mainCamPos;
-            Camera.main.transform.localEulerAngles = data.mainCamRote;
+            Camera.main.transform.position = cfg.mainCamPos;
+            Camera.main.transform.localEulerAngles = cfg.mainCamRote;
             cityPlayerGo.transform.localScale = new Vector3(1f, 1f, 1f);
 
             playerCtrl = cityPlayerGo.GetComponent<PlayerController>();
@@ -109,7 +100,7 @@ public class MainCitySys : SystemRoot
 
 
     #region  引导相关 
-    public void StartGuideTask(CfgGuideData data) {
+    public void StartGuideTask(CfgGuide data) {
         if (data != null)
         {
             curGuideData = data;
@@ -169,11 +160,7 @@ public class MainCitySys : SystemRoot
                 OpenGuideWnd();
             }
         }
-    }
-
-    private void OpenGuideWnd() { 
-        mGameRoot.mGuideWnd.SetWndState(true);
-    }
+    } 
 
 
     private void ExecuteGuideTask()
@@ -185,19 +172,20 @@ public class MainCitySys : SystemRoot
                 //与智者对话
                 mGameRoot.AddTips(string.Format(Language.GetString(14), curGuideData.coin, curGuideData.exp));
                 break;
-            case 1:
-                //
+            case 1: 
+                OpenCommonBuyWnd(CommonBuyType.Coin);
                 break;
             case 2:
+                OpenCommonBuyWnd(CommonBuyType.Power);
                 break;
             case 3:
+                OpenStrongWnd();
                 break;
             case 4:
+                FuBenSys.Instance.OpenFuBenWnd();
                 break;
             case 5:
-                break;
-            default:
-                break;
+                break; 
         }
     }
 
@@ -205,7 +193,20 @@ public class MainCitySys : SystemRoot
     #endregion
 
 
-    #region 面板刷新
+    #region 面板操作
+    private void OpenGuideWnd()
+    {
+        mGameRoot.mGuideWnd.SetWndState(true);
+    }
+
+    private void OpenCommonBuyWnd(CommonBuyType _type) {
+        mGameRoot.mCommonBuyWnd.SetWndState(true, new object[1] { _type });
+    }
+
+    private void OpenStrongWnd()
+    {
+        mGameRoot.mStrongWnd.SetWndState();
+    }
 
     public void UpdateMainWnd(PlayerData data) {
         mGameRoot.mMainWnd.UpdateData(data);
@@ -217,7 +218,7 @@ public class MainCitySys : SystemRoot
 
     public void AddChatMsg(string str) {
         mGameRoot.mChatWnd.AddChatMsg(str);
-    }
+    }   
 
     #endregion
 

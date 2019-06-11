@@ -74,7 +74,7 @@ public class MainWnd : WindowRoot
     private Vector2 pointerStartPos;
     #endregion
 
-    private CfgGuideData curGuideData; 
+    private CfgGuide curGuideData; 
 
 
     private void Awake()
@@ -165,7 +165,7 @@ public class MainWnd : WindowRoot
             imgExpFill.fillAmount = percent;
 
             //更新引导数据
-            curGuideData = mCfgSvc.GetGuideData(data.GuideID); 
+            curGuideData = mCfgSvc.GetCfgGuide(data.GuideID); 
             UpateGuideData();
         }
     }
@@ -225,7 +225,10 @@ public class MainWnd : WindowRoot
         //引导任务按钮
         MainCitySys.Instance.StartGuideTask(curGuideData);
     }
-    private void OnBtnFuBen() { }
+    private void OnBtnFuBen() {
+        //打开副本界面
+        FuBenSys.Instance.OpenFuBenWnd();
+    }
     private void OnBtnTask() { }
 
 

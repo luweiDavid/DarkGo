@@ -34,23 +34,23 @@ public class CfgSvc : ServiceRoot<CfgSvc>
     /// <returns></returns>
     public int GetStrongProTotalAddition(int pos, int starLv,int proType) { 
         int _value = 0;
-        Dictionary<int, CfgStrongData> dataDic = null;
-        if (strongDataDic.TryGetValue(pos, out dataDic)) {
+        Dictionary<int, CfgStrong> cfgDic = null;
+        if (strongCfgDic.TryGetValue(pos, out cfgDic)) {
             for (int i = 1; i <= starLv; i++)
             {
-                if (!dataDic.ContainsKey(i)) {
+                if (!cfgDic.ContainsKey(i)) {
                     continue;
                 }
                 switch (proType)
                 {
                     case (int)PropertyType.Hp:
-                        _value += dataDic[i].addHp;
+                        _value += cfgDic[i].addHp;
                         break;
                     case (int)PropertyType.Hurt:
-                        _value += dataDic[i].addHurt;
+                        _value += cfgDic[i].addHurt;
                         break;
                     case (int)PropertyType.Def:
-                        _value += dataDic[i].addDef;
+                        _value += cfgDic[i].addDef;
                         break;
                 }
             }
@@ -58,10 +58,10 @@ public class CfgSvc : ServiceRoot<CfgSvc>
         return _value;
     }
 
-    public CfgStrongData GetStrongData(int pos,int starLv) {
-        CfgStrongData data = null;
-        Dictionary<int, CfgStrongData> dataDic = null;
-        if(strongDataDic.TryGetValue(pos,out dataDic))
+    public CfgStrong GetCfgStrong(int pos,int starLv) {
+        CfgStrong data = null;
+        Dictionary<int, CfgStrong> dataDic = null;
+        if(strongCfgDic.TryGetValue(pos,out dataDic))
         {
             if (dataDic != null && dataDic.TryGetValue(starLv, out data)) {
                 return data;
@@ -70,7 +70,7 @@ public class CfgSvc : ServiceRoot<CfgSvc>
         return null;
     }
 
-    private Dictionary<int, Dictionary<int, CfgStrongData>> strongDataDic = new Dictionary<int, Dictionary<int, CfgStrongData>>();
+    private Dictionary<int, Dictionary<int, CfgStrong>> strongCfgDic = new Dictionary<int, Dictionary<int, CfgStrong>>();
     private void InitStrongCfg(string path)
     {
         TextAsset ta = Resources.Load<TextAsset>(path);
@@ -82,7 +82,7 @@ public class CfgSvc : ServiceRoot<CfgSvc>
         xmlDoc.LoadXml(ta.text);
 
         XmlNodeList nodeList = xmlDoc.SelectSingleNode("root").ChildNodes;
-        Dictionary<int, CfgStrongData> dataDic = null;
+        Dictionary<int, CfgStrong> cfgDic = null;
         for (int i = 0; i < nodeList.Count; i++)
         {
             XmlElement ele = nodeList[i] as XmlElement;
@@ -91,7 +91,7 @@ public class CfgSvc : ServiceRoot<CfgSvc>
                 continue;
             }
             int ID = Convert.ToInt32(ele.GetAttribute("ID"));
-            CfgStrongData cfg = new CfgStrongData
+            CfgStrong cfg = new CfgStrong
             {
                 ID = ID,
             };
@@ -128,14 +128,14 @@ public class CfgSvc : ServiceRoot<CfgSvc>
                 }
             }
             
-            if (strongDataDic.ContainsKey(cfg.pos))
+            if (strongCfgDic.ContainsKey(cfg.pos))
             {
-                dataDic.Add(cfg.starLv, cfg);
+                cfgDic.Add(cfg.starLv, cfg);
             }
             else {
-                dataDic = new Dictionary<int, CfgStrongData>();
-                dataDic.Add(cfg.starLv, cfg);
-                strongDataDic.Add(cfg.pos, dataDic);
+                cfgDic = new Dictionary<int, CfgStrong>();
+                cfgDic.Add(cfg.starLv, cfg);
+                strongCfgDic.Add(cfg.pos, cfgDic);
             } 
         }
     }
@@ -143,14 +143,14 @@ public class CfgSvc : ServiceRoot<CfgSvc>
     #endregion
 
     #region  初始化配置表 -- 地图配置
-    public CfgMapData GetMapData(int mapID)
+    public CfgMap GetCfgMap(int mapID)
     {
-        CfgMapData data = null;
-        mapDataDic.TryGetValue(mapID, out data);
-        return data;
+        CfgMap cfg = null;
+        mapCfgDic.TryGetValue(mapID, out cfg);
+        return cfg;
     }
 
-    private Dictionary<int, CfgMapData> mapDataDic = new Dictionary<int, CfgMapData>();
+    private Dictionary<int, CfgMap> mapCfgDic = new Dictionary<int, CfgMap>();
 
     private void InitMapCfg(string path)
     {
@@ -173,7 +173,7 @@ public class CfgSvc : ServiceRoot<CfgSvc>
             }
             int ID = Convert.ToInt32(ele.GetAttribute("ID"));
 
-            CfgMapData mapData = new CfgMapData
+            CfgMap cfg = new CfgMap
             {
                 ID = ID,
             };
@@ -184,33 +184,33 @@ public class CfgSvc : ServiceRoot<CfgSvc>
                 switch (str)
                 {
                     case "mapName":
-                        mapData.mapName = subEle.InnerText;
+                        cfg.mapName = subEle.InnerText;
                         break;
                     case "sceneName":
-                        mapData.sceneName = subEle.InnerText;
+                        cfg.sceneName = subEle.InnerText;
                         break;
                     case "power":
-                        mapData.power = int.Parse(subEle.InnerText);
+                        cfg.power = int.Parse(subEle.InnerText);
                         break;
                     case "mainCamPos":
                         string[] pos1 = subEle.InnerText.Split(',');
-                        mapData.mainCamPos = new Vector3(float.Parse(pos1[0]), float.Parse(pos1[1]), float.Parse(pos1[2]));
+                        cfg.mainCamPos = new Vector3(float.Parse(pos1[0]), float.Parse(pos1[1]), float.Parse(pos1[2]));
                         break;
                     case "mainCamRote":
                         string[] pos2 = subEle.InnerText.Split(',');
-                        mapData.mainCamRote = new Vector3(float.Parse(pos2[0]), float.Parse(pos2[1]), float.Parse(pos2[2]));
+                        cfg.mainCamRote = new Vector3(float.Parse(pos2[0]), float.Parse(pos2[1]), float.Parse(pos2[2]));
                         break;
                     case "playerBornPos":
                         string[] pos3 = subEle.InnerText.Split(',');
-                        mapData.playerBornPos = new Vector3(float.Parse(pos3[0]), float.Parse(pos3[1]), float.Parse(pos3[2]));
+                        cfg.playerBornPos = new Vector3(float.Parse(pos3[0]), float.Parse(pos3[1]), float.Parse(pos3[2]));
                         break;
                     case "playerBornRote":
                         string[] pos4 = subEle.InnerText.Split(',');
-                        ; mapData.playerBornRote = new Vector3(float.Parse(pos4[0]), float.Parse(pos4[1]), float.Parse(pos4[2]));
+                        cfg.playerBornRote = new Vector3(float.Parse(pos4[0]), float.Parse(pos4[1]), float.Parse(pos4[2]));
                         break;
                 }
             }
-            mapDataDic.Add(ID, mapData);
+            mapCfgDic.Add(ID, cfg);
         }
     }
 
@@ -218,14 +218,14 @@ public class CfgSvc : ServiceRoot<CfgSvc>
 
 
     #region 初始化配置表 -- 引导配置
-    public CfgGuideData GetGuideData(int id)
+    public CfgGuide GetCfgGuide(int id)
     {
-        CfgGuideData cfg = null;
-        guideDataDic.TryGetValue(id, out cfg);
+        CfgGuide cfg = null;
+        guideCfgDic.TryGetValue(id, out cfg);
         return cfg;
     }
 
-    private Dictionary<int, CfgGuideData> guideDataDic = new Dictionary<int, CfgGuideData>();
+    private Dictionary<int, CfgGuide> guideCfgDic = new Dictionary<int, CfgGuide>();
     private void InitGuideCfg(string path)
     {
         TextAsset ta = Resources.Load<TextAsset>(path);
@@ -246,7 +246,7 @@ public class CfgSvc : ServiceRoot<CfgSvc>
                 continue;
             }
             int ID = Convert.ToInt32(ele.GetAttribute("ID"));
-            CfgGuideData cfg = new CfgGuideData();
+            CfgGuide cfg = new CfgGuide();
             cfg.ID = ID;
 
             foreach (XmlElement subEle in nodeList[i].ChildNodes)
@@ -272,7 +272,7 @@ public class CfgSvc : ServiceRoot<CfgSvc>
                 }
             }
 
-            guideDataDic.Add(ID, cfg);
+            guideCfgDic.Add(ID, cfg);
         }
     }
 
