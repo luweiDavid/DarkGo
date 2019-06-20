@@ -5,6 +5,8 @@ using UnityEngine;
 public class BattleSys : SystemRoot<BattleSys>
 {
 
+    
+
     public void InitBattle(int mapId)
     {
         base.Init();
@@ -18,6 +20,15 @@ public class BattleSys : SystemRoot<BattleSys>
 
         BattleMgr bMgr = go.AddComponent<BattleMgr>();
         bMgr.Init(mapId);
+    }
+
+
+    public void OpenPlayerCtrlWnd() {
+        mGameRoot.mPlayerCtrlWnd.SetWndState();
+    }
+
+    public void SetPlayerDir(Vector2 dir) {
+
     }
 
 }

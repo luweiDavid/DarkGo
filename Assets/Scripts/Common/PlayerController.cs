@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnMove() {
         //调整方向
-        float angle = Vector2.SignedAngle(moveDir, new Vector2(0, 1));//+ mainCamTr.eulerAngles.y;
+        float angle = Vector2.SignedAngle(moveDir, new Vector2(0, 1))+ mainCamTr.eulerAngles.y;
         transform.localEulerAngles = new Vector3(0, angle, 0);
 
         charCtrl.Move(Time.deltaTime * Constant.PlayerMoveSpeed * transform.forward);

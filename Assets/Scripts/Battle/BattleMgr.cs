@@ -9,7 +9,7 @@ public class BattleMgr : MgrRoot<BattleMgr>
     private AudioSvc mAudioSvc;
     private CfgSvc mCfgSvc;
 
-    
+     
     private SkillMgr mSkillMgr;
     private StateMgr mStateMgr;
     private MapMgr mMapMgr;
@@ -48,11 +48,16 @@ public class BattleMgr : MgrRoot<BattleMgr>
     private void InitScene(CfgMap cfg) {
         Camera.main.transform.position = cfg.mainCamPos;
         Camera.main.transform.eulerAngles = cfg.mainCamRote;
-        
-        GameObject playerGo = mResSvc.GetInstantiateGo(PathDefine.PlayerAssassin);
+
+        GameObject playerGo = new GameObject();
         playerGo.transform.position = cfg.playerBornPos;
-        playerGo.transform.eulerAngles = cfg.playerBornRote; 
+        playerGo.transform.eulerAngles = cfg.playerBornRote;
+        playerGo = mResSvc.GetInstantiateGo(PathDefine.PlayerAssassin, true, playerGo.transform);
+         
+        BattleSys.Instance.OpenPlayerCtrlWnd();
 
     }
+
+
 
 }

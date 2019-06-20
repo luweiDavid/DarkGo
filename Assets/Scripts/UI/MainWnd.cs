@@ -69,8 +69,7 @@ public class MainWnd : WindowRoot
     private RectTransform rockingBarBgTr;
     private RectTransform rockingBarPointTr;
 
-    private Vector2 originPos_rbBg;
-
+    private Vector2 originPos_rbBg; 
     private Vector2 pointerStartPos;
     #endregion
 

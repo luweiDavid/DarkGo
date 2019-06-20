@@ -48,7 +48,8 @@ public class ResSvc : ServiceRoot<ResSvc>
     }
     #region 资源加载 --- prefab
     private Dictionary<string, GameObject> prefabDic = new Dictionary<string, GameObject>();
-    public GameObject GetInstantiateGo(string path, bool isCache = false) {
+
+    public GameObject GetInstantiateGo(string path, bool isCache = false, Transform trans = null) {
         GameObject prefab = null;
         if (!prefabDic.TryGetValue(path, out prefab)) {
             prefab = Resources.Load<GameObject>(path);
@@ -61,7 +62,13 @@ public class ResSvc : ServiceRoot<ResSvc>
         GameObject go = null;
         if (prefab != null)
         {
-            go = Instantiate(prefab);
+            if (trans != null)
+            {
+                go = Instantiate(prefab, trans.position, trans.rotation);
+            }
+            else {
+                go = Instantiate(prefab);
+            } 
         }
         else {
             Debug.LogError("prefab资源加载错误 ： " + path);

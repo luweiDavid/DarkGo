@@ -52,6 +52,8 @@ public class GameRoot : MonoBehaviour
     public CommonBuyWnd mCommonBuyWnd;
     [HideInInspector]
     public FuBenWnd mFuBenWnd;
+    [HideInInspector]
+    public PlayerCtrlWnd mPlayerCtrlWnd;
     #endregion
 
     //数据层
@@ -78,6 +80,7 @@ public class GameRoot : MonoBehaviour
         mChatWnd = transform.Find("UIRoot/ChatWnd").GetComponent<ChatWnd>();
         mCommonBuyWnd = transform.Find("UIRoot/CommonBuyWnd").GetComponent<CommonBuyWnd>();
         mFuBenWnd = transform.Find("UIRoot/FuBenWnd").GetComponent<FuBenWnd>();
+        mPlayerCtrlWnd = transform.Find("UIRoot/PlayerCtrlWnd").GetComponent<PlayerCtrlWnd>();
          
         #endregion
 
